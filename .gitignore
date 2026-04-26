@@ -1,0 +1,28 @@
+# Environment variables with passwords
+.env
+
+# Database backups (large files)
+*.sql.gz
+backup_*.sql
+
+# NocoDB session/cache
+nocodb_session_*
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Large CSV exports (optional - uncomment if needed)
+# media/*.csv
