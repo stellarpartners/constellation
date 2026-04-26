@@ -1,28 +1,51 @@
-# Environment variables with passwords
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
 .env
+*.egg-info/
+dist/
+build/
 
-# Database backups (large files)
-*.sql.gz
-backup_*.sql
+# Docker
+docker-compose.override.yml
 
-# NocoDB session/cache
-nocodb_session_*
-
-# IDE/editor files
+# IDE
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Temporary files
-tmp/
-temp/
-*.tmp
+# Data (optional - uncomment if you don't want to track CSV files)
+# data/media/*.csv
+# data/journalists/*.csv
 
-# Large CSV exports (optional - uncomment if needed)
-# media/*.csv
+# Build artifacts
+frontend/.svelte-kit/
+frontend/build/
+frontend/node_modules/
+static/_app/
+
+# Sensitive
+.env
+*.key
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.claude/
+.vscode/
+.idea/
