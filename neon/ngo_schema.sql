@@ -153,19 +153,17 @@ CREATE INDEX IF NOT EXISTS idx_acf_ngo ON ngo_acf(ngo_id);
 -- ============================================================================
 -- TABLE: ngo_ngheroes
 -- Source: ngoHeroes-Grid view.csv (200 rows → 195 unique NGOs, 5 duplicates)
--- Note: 'Name' column contains full ngoHeroes URL path (URL-encoded slug).
---       Reconstruct full URL at query time or store as-is.
+-- Note: 'Name' column contains the full ngoHeroes URL — stored as profile_url.
 --       5 NGOs appear twice in source CSV.
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS ngo_ngheroes (
     id              SERIAL PRIMARY KEY,
     ngo_id          INT REFERENCES ngos(id) ON DELETE CASCADE,
-    profile_slug    VARCHAR(500) NOT NULL,      -- full URL slug from 'Name' column (as-is)
-    profile_url     VARCHAR(500),               -- reconstructed full URL
+    profile_url     VARCHAR(500) NOT NULL,      -- full ngoHeroes URL from 'Name' column
     source_name     VARCHAR(500),               -- NGO name from 'MASTER' column
     created_at      TIMESTAMP DEFAULT NOW(),
 
-    UNIQUE(ngo_id, profile_slug)
+    UNIQUE(ngo_id, profile_url)
 );
 
 CREATE INDEX IF NOT EXISTS idx_ngh_ngo ON ngo_ngheroes(ngo_id);
