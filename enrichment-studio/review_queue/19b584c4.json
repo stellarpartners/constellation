@@ -1,0 +1,36 @@
+{
+  "task_id": "19b584c4",
+  "record": {
+    "id": "218",
+    "name": "Nextdeal",
+    "website": "https://www.nextdeal.gr/",
+    "type": "",
+    "geo": "",
+    "facebook": "https://www.facebook.com/298081390217323",
+    "twitter": "https://x.com/NextDeal_gr",
+    "instagram": "https://www.instagram.com/nextdeal.gr/",
+    "linkedin": "https://dk.linkedin.com/company/nextdeal-gr",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "enriched",
+  "result": {
+    "name": "Nextdeal",
+    "website": "https://www.nextdeal.gr/",
+    "facebook": "https://www.facebook.com/298081390217323",
+    "twitter": "https://x.com/NextDeal_gr",
+    "instagram": "https://www.instagram.com/nextdeal.gr/",
+    "linkedin": "https://dk.linkedin.com/company/nextdeal-gr",
+    "email": ""
+  },
+  "found_fields": {
+    "website": "https://www.nextdeal.gr/",
+    "facebook": "https://www.facebook.com/298081390217323",
+    "twitter": "https://x.com/NextDeal_gr",
+    "instagram": "https://www.instagram.com/nextdeal.gr/",
+    "linkedin": "https://dk.linkedin.com/company/nextdeal-gr"
+  },
+  "created": "2026-04-29T15:13:42.289051",
+  "enriched_at": "2026-04-29T15:13:42.289051"
+}

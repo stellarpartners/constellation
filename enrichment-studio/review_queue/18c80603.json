@@ -1,0 +1,17 @@
+{
+  "task_id": "18c80603",
+  "record": {
+    "id": "Steps Greece",
+    "name": "Steps Greece",
+    "website": "https://steps.org.gr/",
+    "email": "communications@steps.org.gr",
+    "facebook": "https://www.facebook.com/StepsGreece/",
+    "linkedin": "https://www.linkedin.com/company/steps-greece/",
+    "instagram": "https://www.instagram.com/stepsgreece/",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched1found_email_result_found_communications@steps.org.gr",
+  "result": "communications@steps.org.gr (also: streetembrace@steps.org.gr, koukkida@steps.org.gr)",
+  "created": "2026-04-29T15:10:50.303344"
+}

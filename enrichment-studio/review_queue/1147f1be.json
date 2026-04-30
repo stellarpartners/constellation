@@ -1,0 +1,22 @@
+{
+  "task_id": "1147f1be",
+  "record": {
+    "id": "ΣΕ ΑΝΑΜΟΝΗ / ON HOLD",
+    "name": "ΣΕ ΑΝΑΜΟΝΗ / ON HOLD",
+    "website": "https://onhold.gr/",
+    "email": "dim_panel@yahoo.gr",
+    "facebook": "https://www.facebook.com/seanamoni/",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email,facebook",
+  "status": "enriched_email_facebook",
+  "result": {
+    "email": "dim_panel@yahoo.gr",
+    "facebook": "https://www.facebook.com/seanamoni/",
+    "phone": "+30 690 914 8182"
+  },
+  "created": "2026-04-29T15:10:50.299173",
+  "enriched_at": "2026-04-29T15:10:50.299173"
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "0404daf6",
+  "record": {
+    "id": "Ελληνική Εταιρεία Ενεργειακής Οικονομίας",
+    "name": "Ελληνική Εταιρεία Ενεργειακής Οικονομίας",
+    "website": "https://www.haee.gr/",
+    "email": "info@haee.gr",
+    "facebook": "https://www.facebook.com/haeegr/",
+    "linkedin": "https://www.linkedin.com/company/hellenic-association-for-energy-economics/",
+    "instagram": ""
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": null,
+  "created": "2026-04-29T15:10:50.313584"
+}

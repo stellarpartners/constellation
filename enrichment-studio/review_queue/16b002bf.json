@@ -1,0 +1,22 @@
+{
+  "task_id": "16b002bf",
+  "record": {
+    "id": "ΝΩΜΩ",
+    "name": "ΝΩΜΩ",
+    "website": "https://nwmw.gr/",
+    "email": "",
+    "facebook": "https://www.facebook.com/nwmw.gr/",
+    "linkedin": "https://www.linkedin.com/company/nwmw/",
+    "instagram": "https://www.instagram.com/nwmw.gr/",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched_result:0_found_1_missing",
+  "result": {
+    "email": null,
+    "facebook": null,
+    "linkedin": null,
+    "instagram": null
+  },
+  "created": "2026-04-29T15:10:50.298694"
+}

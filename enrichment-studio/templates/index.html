@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constellation Enrichment Studio</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f8fa; color: #1a1a2e; min-height: 100vh; }
+  a { color: #4a7fff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header { background: #ffffff; border-bottom: 1px solid #e2e4ea; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  header h1 { font-size: 18px; font-weight: 600; color: #1a1a2e; }
+  header .badge { background: #f0f0f5; color: #5555aa; font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid #d0d0e0; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px; }
+
+  .section { background: #ffffff; border: 1px solid #e2e4ea; border-radius: 12px; padding: 28px; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .section h2 { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #1a1a2e; display: flex; align-items: center; gap: 10px; }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: #ffffff; border: 1px solid #e2e4ea; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .stat-card h3 { font-size: 13px; color: #8888a0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .stat-card .big { font-size: 36px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .stat-card .sub { font-size: 13px; color: #8888a0; }
+
+  /* Gap table */
+  .gap-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .gap-table th { text-align: left; padding: 10px 14px; color: #8888a0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e4ea; }
+  .gap-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f5; }
+  .gap-table .pct-bar { display: flex; align-items: center; gap: 10px; }
+  .gap-table .bar-bg { flex: 1; height: 6px; background: #e8eaf0; border-radius: 3px; min-width: 80px; }
+  .gap-table .bar-fill { height: 100%; background: #ef4444; border-radius: 3px; }
+  .gap-table .pct-text { font-size: 13px; color: #8888a0; min-width: 36px; text-align: right; }
+
+  /* Actions */
+  .actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  button { padding: 8px 18px; border-radius: 8px; border: 1px solid #d0d0e0; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; background: #ffffff; color: #1a1a2e; }
+  button:hover { opacity: 0.85; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  button.primary { background: #4a7fff; color: #ffffff; border-color: #4a7fff; }
+  button.danger { background: #ef4444; color: #ffffff; border-color: #ef4444; }
+  button.secondary { background: #f0f0f5; color: #5555aa; border-color: #d0d0e0; }
+  button.success { background: #22c55e; color: #ffffff; border-color: #22c55e; }
+
+  /* Queue status bar */
+  .queue-bar { background: #ffffff; border: 1px solid #e2e4ea; border-radius: 10px; padding: 16px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .queue-bar .q-stat { font-size: 14px; }
+  .queue-bar .q-stat strong { color: #1a1a2e; font-size: 18px; margin-right: 4px; }
+  .queue-bar .q-stat span { color: #8888a0; }
+  .queue-bar .q-divider { width: 1px; height: 24px; background: #e2e4ea; }
+
+  /* Record list */
+  .record-list { max-height: 400px; overflow-y: auto; }
+  .record-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #f0f0f5; font-size: 14px; }
+  .record-row:last-child { border-bottom: none; }
+  .record-row:hover { background: #f7f8fa; border-radius: 6px; }
+  .record-row .r-name { flex: 1; color: #1a1a2e; font-weight: 500; }
+  .record-row .r-missing { display: flex; gap: 6px; flex-wrap: wrap; }
+  .record-row .r-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+  .record-row .r-btn { padding: 4px 12px; font-size: 12px; }
+
+  /* Enrichment run section */
+  .run-panel { background: #f7f8fa; border: 2px dashed #d0d0e0; border-radius: 12px; padding: 32px; text-align: center; }
+  .run-panel h3 { font-size: 16px; margin-bottom: 8px; color: #1a1a2e; }
+  .run-panel p { color: #8888a0; font-size: 14px; margin-bottom: 20px; }
+  .run-panel select, .run-panel input { background: #ffffff; border: 1px solid #d0d0e0; color: #1a1a2e; padding: 8px 14px; border-radius: 8px; font-size: 14px; }
+  .run-panel .controls { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .run-panel .controls label { font-size: 14px; color: #8888a0; }
+
+  /* Notification */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #22c55e; color: #fff; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 500; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Constellation Enrichment Studio</h1>
+  <div style="display:flex;gap:12px;align-items:center">
+    <a href="/queue" class="badge">Review Queue →</a>
+    <span class="badge">Internal Tool</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Queue status bar -->
+  <div class="queue-bar">
+    <div class="q-stat"><strong id="q-pending">0</strong><span> pending tasks</span></div>
+    <div class="q-divider"></div>
+    <div class="q-stat"><strong id="q-done">{{ done|length }}</strong><span> enriched</span></div>
+    <div class="q-divider"></div>
+    <div class="q-stat"><strong>{{ (pending|length) + (done|length) }}</strong><span> total queued</span></div>
+  </div>
+
+  <!-- ── MEDIA OUTLETS ── -->
+  <div class="section">
+    <h2>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c9fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Media Outlets
+      <span style="color:#666;font-weight:400;font-size:13px;margin-left:8px">{{ media_sum.total }} total</span>
+    </h2>
+
+    <table class="gap-table">
+      <thead><tr>
+        <th>Field</th>
+        <th>Populated</th>
+        <th>Missing</th>
+        <th>Coverage</th>
+        <th>Action</th>
+      </tr></thead>
+      <tbody>
+        {% for field in media_fields %}
+        {% set filled = media_sum.total - media_sum.per_field[field] %}
+        {% set pct = (filled / media_sum.total * 100)|round|int if media_sum.total > 0 else 0 %}
+        <tr>
+          <td>{{ field }}</td>
+          <td style="color:#4caf7d">{{ filled }}</td>
+          <td style="color:#e05c5c">{{ media_sum.per_field[field] }}</td>
+          <td>
+            <div class="pct-bar">
+              <div class="bar-bg"><div class="bar-fill" style="width:{{ pct }}%"></div></div>
+              <span class="pct-text">{{ pct }}%</span>
+            </div>
+          </td>
+          <td>
+            <button class="secondary r-btn" onclick="enqueueAll('media', '{{ field }}')">Enqueue missing</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="actions">
+      <button class="primary" onclick="enqueueAll('media', 'all')">Enqueue ALL missing media fields</button>
+      <button class="secondary" onclick="showRecords('media')">Browse records</button>
+    </div>
+
+    <div id="media-records" class="record-list" style="display:none;margin-top:16px"></div>
+  </div>
+
+  <!-- ── JOURNALISTS ── -->
+  <div class="section">
+    <h2>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c9fff" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Journalists
+      <span style="color:#666;font-weight:400;font-size:13px;margin-left:8px">{{ journo_sum.total }} total</span>
+    </h2>
+
+    <table class="gap-table">
+      <thead><tr>
+        <th>Field</th>
+        <th>Populated</th>
+        <th>Missing</th>
+        <th>Coverage</th>
+        <th>Action</th>
+      </tr></thead>
+      <tbody>
+        {% for field in journo_fields %}
+        {% set filled = journo_sum.total - journo_sum.per_field[field] %}
+        {% set pct = (filled / journo_sum.total * 100)|round|int if journo_sum.total > 0 else 0 %}
+        <tr>
+          <td>{{ field }}</td>
+          <td style="color:#4caf7d">{{ filled }}</td>
+          <td style="color:#e05c5c">{{ journo_sum.per_field[field] }}</td>
+          <td>
+            <div class="pct-bar">
+              <div class="bar-bg"><div class="bar-fill" style="width:{{ pct }}%"></div></div>
+              <span class="pct-text">{{ pct }}%</span>
+            </div>
+          </td>
+          <td>
+            <button class="secondary r-btn" onclick="enqueueAll('journalist', '{{ field }}')">Enqueue missing</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="actions">
+      <button class="primary" onclick="enqueueAll('journalist', 'all')">Enqueue ALL missing journalist fields</button>
+      <button class="secondary" onclick="showRecords('journalist')">Browse records</button>
+    </div>
+
+    <div id="journalist-records" class="record-list" style="display:none;margin-top:16px"></div>
+  </div>
+
+  <!-- ── NGOs ── -->
+  <div class="section">
+    <h2>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c9fff" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      NGOs
+      <span style="color:#666;font-weight:400;font-size:13px;margin-left:8px">{{ ngo_sum.total }} total</span>
+    </h2>
+
+    <table class="gap-table">
+      <thead><tr>
+        <th>Field</th>
+        <th>Populated</th>
+        <th>Missing</th>
+        <th>Coverage</th>
+        <th>Action</th>
+      </tr></thead>
+      <tbody>
+        {% for field in ngo_fields %}
+        {% set filled = ngo_sum.total - ngo_sum.per_field[field] %}
+        {% set pct = (filled / ngo_sum.total * 100)|round|int if ngo_sum.total > 0 else 0 %}
+        <tr>
+          <td>{{ field }}</td>
+          <td style="color:#4caf7d">{{ filled }}</td>
+          <td style="color:#e05c5c">{{ ngo_sum.per_field[field] }}</td>
+          <td>
+            <div class="pct-bar">
+              <div class="bar-bg"><div class="bar-fill" style="width:{{ pct }}%"></div></div>
+              <span class="pct-text">{{ pct }}%</span>
+            </div>
+          </td>
+          <td>
+            <button class="secondary r-btn" onclick="enqueueAll('ngo', '{{ field }}')">Enqueue missing</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="actions">
+      <button class="primary" onclick="enqueueAll('ngo', 'all')">Enqueue ALL missing NGO fields</button>
+      <button class="secondary" onclick="showRecords('ngo')">Browse records</button>
+    </div>
+
+    <div id="ngo-records" class="record-list" style="display:none;margin-top:16px"></div>
+  </div>
+
+  <!-- ── ENRICHMENT RUNNER ── -->
+  <div class="section">
+    <h2>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c9fff" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Enrichment Engine
+    </h2>
+    <div class="run-panel">
+      <h3>Fire Enrichment Subagents</h3>
+      <p>Parallel web research agents will hunt down missing contact details for all queued records.</p>
+      <div class="controls">
+        <label>Source:</label>
+        <select id="run-source">
+          <option value="all">All queued</option>
+          <option value="media">Media only</option>
+          <option value="journalist">Journalists only</option>
+          <option value="ngo">NGOs only</option>
+        </select>
+        <label>Concurrency:</label>
+        <input type="number" id="run-concurrency" value="5" min="1" max="20" style="width:70px">
+        <label style="margin-left:8px">Max tasks:</label>
+        <input type="number" id="run-max" value="20" min="1" max="200" style="width:70px">
+      </div>
+      <button class="primary" onclick="runEnrichment()" id="run-btn" style="font-size:16px;padding:12px 32px">
+        Launch Enrichment Run →
+      </button>
+      <div id="run-status" style="margin-top:16px;font-size:14px;color:#666"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Pass data from Flask
+  const mediaRecords = {{ media|tojson }};
+  const journoRecords = {{ journo|tojson }};
+  const ngoRecords = {{ ngos|tojson }};
+  const pendingTasks = {{ pending|tojson }};
+
+  document.getElementById('q-pending').textContent = pendingTasks.length;
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+  }
+
+  function showRecords(source) {
+    const el = document.getElementById(source + '-records');
+    const records = source === 'media' ? mediaRecords : source === 'journalist' ? journoRecords : ngoRecords;
+    const fields = source === 'media'
+      ? ['website','facebook','twitter','instagram','linkedin','youtube']
+      : source === 'journalist'
+      ? ['email','twitter','linkedin']
+      : ['website','email','facebook','linkedin','instagram'];
+
+    if (el.style.display === 'none') {
+      let html = '';
+      records.slice(0, 50).forEach(r => {
+        const missing = fields.filter(f => !r[f]);
+        if (missing.length === 0) return;
+        html += `<div class="record-row">
+          <span class="r-name">${r.name || r.id}</span>
+          <span style="color:#666;font-size:12px">${r.id}</span>
+          <div class="r-missing">${missing.map(f => `<span class="r-tag">${f}</span>`).join('')}</div>
+          <button class="secondary r-btn" onclick="enqueueOne(${JSON.stringify(r).replace(/"/g, '&quot;')}, '${source}')">+</button>
+        </div>`;
+      });
+      el.innerHTML = html || '<div style="padding:20px;color:#666">All records populated!</div>';
+      el.style.display = 'block';
+    } else {
+      el.style.display = 'none';
+    }
+  }
+
+  function enqueueAll(source, field) {
+    fetch('/api/batch-enqueue', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({source, field})
+    })
+    .then(r => r.json())
+    .then(d => {
+      toast(`Enqueued ${d.enqueued} records`);
+      location.reload();
+    });
+  }
+
+  function enqueueOne(record, source) {
+    fetch('/api/enqueue', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({record, field: 'all'})
+    })
+    .then(r => r.json())
+    .then(d => toast(`Task ${d.task_id} queued`));
+  }
+
+  async function runEnrichment() {
+    const btn = document.getElementById('run-btn');
+    const status = document.getElementById('run-status');
+    btn.disabled = true;
+    btn.textContent = 'Running...';
+    status.textContent = 'Spawning parallel subagents...';
+
+    const source = document.getElementById('run-source').value;
+    const concurrency = parseInt(document.getElementById('run-concurrency').value);
+    const maxTasks = parseInt(document.getElementById('run-max').value);
+
+    // Get pending tasks
+    const pending = pendingTasks.slice(0, maxTasks);
+    status.textContent = `Processing ${pending.length} tasks in batches of ${concurrency}...`;
+
+    // Process in parallel batches
+    let completed = 0;
+    for (let i = 0; i < pending.length; i += concurrency) {
+      const batch = pending.slice(i, i + concurrency);
+      await Promise.all(batch.map(task =>
+        fetch('/api/enrich-task', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(task)
+        }).then(r => r.json())
+        .then(d => {
+          completed++;
+          status.textContent = `Progress: ${completed}/${pending.length} done`;
+        })
+        .catch(e => {
+          completed++;
+          status.textContent = `Error on ${task.task_id}: ${e}`;
+        })
+      ));
+    }
+
+    status.textContent = `Done! ${completed} tasks processed.`;
+    btn.disabled = false;
+    btn.textContent = 'Launch Enrichment Run →';
+    toast('Enrichment run complete!');
+  }
+</script>
+
+</body>
+</html>

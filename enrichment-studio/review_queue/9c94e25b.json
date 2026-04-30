@@ -1,0 +1,27 @@
+{
+  "task_id": "9c94e25b",
+  "record": {
+    "id": "204",
+    "name": "Epixeiro",
+    "website": "https://www.epixeiro.gr",
+    "type": "business/media outlet (entrepreneurship news)",
+    "geo": "Greece (Athens area - Paradissos Amaroussiou)",
+    "facebook": "https://www.facebook.com/epixeiro.gr",
+    "twitter": "https://twitter.com/epixeiro",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/epixeiro-gr",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "enriched",
+  "result": {
+    "website": "https://www.epixeiro.gr",
+    "facebook": "https://www.facebook.com/epixeiro.gr",
+    "twitter": "https://twitter.com/epixeiro",
+    "linkedin": "https://www.linkedin.com/company/epixeiro-gr",
+    "type": "business/media outlet (entrepreneurship news)",
+    "geo": "Greece (Athens area - Paradissos Amaroussiou)"
+  },
+  "created": "2026-04-29T14:23:16.250369"
+}

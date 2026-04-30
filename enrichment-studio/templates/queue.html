@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Queue — Constellation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --surface: #f7f8fa;
+    --card: #ffffff;
+    --border: #e2e4ea;
+    --text: #1a1a2e;
+    --text-muted: #8888a0;
+    --accent: #4a7fff;
+    --accent-bg: #eef2ff;
+    --success: #22c55e;
+    --success-bg: #f0fdf4;
+    --success-border: #bbf7d0;
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fde68a;
+    --tag-bg: #f0f0f5;
+    --tag-text: #55556a;
+    --tag-border: #d0d0e0;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  header h1 { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+
+  /* ── TOPBAR ───────────────────────────────── */
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+  .tabs { display: flex; gap: 2px; background: var(--surface); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+  .tab { padding: 7px 18px; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.15s; border: none; background: none; }
+  .tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* ── STATS ─────────────────────────────────── */
+  .stats-row { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+  .stat-bubble { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 22px; text-align: center; flex: 1; min-width: 100px; }
+  .stat-bubble .num { font-size: 26px; font-weight: 700; }
+  .stat-bubble .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .stat-bubble.pending .num { color: var(--warning); }
+  .stat-bubble.enriched .num { color: var(--accent); }
+  .stat-bubble.approved .num { color: var(--success); }
+  .stat-bubble.rejected .num { color: var(--danger); }
+
+  /* ── ACTIONS BAR ───────────────────────────── */
+  .actions-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; margin-bottom: 18px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  button { padding: 7px 16px; border-radius: 7px; border: 1px solid var(--border); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; background: var(--card); color: var(--text); }
+  button:hover { opacity: 0.85; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.success { background: var(--success); color: #fff; border-color: var(--success); }
+  button.danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+  button.success-outline { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
+  button.danger-outline { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── TASK CARDS ────────────────────────────── */
+  .task-list { display: flex; flex-direction: column; gap: 10px; }
+  .task-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; transition: border-color 0.2s; }
+  .task-card.enriched { border-color: var(--accent); border-left-width: 3px; }
+  .task-card.approved { border-color: var(--success); border-left-width: 3px; background: var(--success-bg); }
+  .task-card.rejected { border-color: var(--danger-border); opacity: 0.6; }
+
+  .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .task-meta { display: flex; flex-direction: column; gap: 4px; }
+  .task-source { font-size: 11px; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; width: fit-content; }
+  .task-source.media { background: #e0eaff; color: #3a60dd; }
+  .task-source.journalist { background: var(--warning-bg); color: #b45309; border: 1px solid var(--warning-border); }
+  .task-source.ngo, .task-source.n\-go { background: var(--success-bg); color: #15803d; border: 1px solid var(--success-border); }
+  .task-name { font-size: 16px; font-weight: 600; color: var(--text); margin-top: 4px; }
+  .task-id { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+  .task-status { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .task-status.pending { background: var(--warning-bg); color: #b45309; border: 1px solid var(--warning-border); }
+  .task-status.enriched { background: var(--accent-bg); color: #2a5aff; border: 1px solid #c7d7ff; }
+  .task-status.approved { background: var(--success-bg); color: #15803d; border: 1px solid var(--success-border); }
+  .task-status.rejected { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+
+  /* ── FIELD TABLE ──────────────────────────── */
+  .field-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .field-table th { text-align: left; padding: 7px 12px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  .field-table td { padding: 8px 12px; border-bottom: 1px solid var(--surface); vertical-align: middle; }
+  .field-table tr:last-child td { border-bottom: none; }
+  .field-table .f-name { color: var(--text-muted); font-weight: 500; width: 90px; }
+  .field-table .f-val { word-break: break-all; }
+  .field-table .f-val.empty { color: var(--text-muted); font-style: italic; }
+  .field-table .f-val.found { color: var(--success); font-weight: 500; }
+  .field-table .f-val.old { color: var(--text-muted); text-decoration: line-through; }
+
+  .link-cell { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  .link-url { color: var(--accent); word-break: break-all; font-size: 12px; }
+  .link-url:hover { text-decoration: underline; }
+  .link-actions { display: flex; gap: 4px; flex-shrink: 0; }
+  .link-actions button { padding: 3px 8px; font-size: 11px; border-radius: 5px; }
+
+  .approved-badge { display: inline-flex; align-items: center; gap: 4px; color: var(--success); font-size: 12px; font-weight: 600; }
+  .rejected-badge { display: inline-flex; align-items: center; gap: 4px; color: var(--danger); font-size: 12px; }
+
+  .email-val { color: var(--accent); font-size: 12px; }
+
+  /* ── APPROVED FIELDS ──────────────────────── */
+  .approved-fields { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .app-field { display: inline-flex; align-items: center; gap: 4px; background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+
+  /* ── TASK ACTIONS ─────────────────────────── */
+  .task-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--surface); }
+  .empty { text-align: center; padding: 60px; color: var(--text-muted); font-size: 15px; }
+
+  /* ── TOAST ───────────────────────────────── */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--success); color: #fff; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 500; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+  /* ── RESPONSIVE ───────────────────────────── */
+  @media (max-width: 640px) {
+    .container { padding: 14px 12px; }
+    header { padding: 12px 16px; }
+    .task-card { padding: 14px 16px; }
+    .field-table .f-name { width: 70px; }
+    .link-cell { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .link-actions { flex-direction: row; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Enrichment Review Queue</h1>
+  <a href="/" style="font-size:14px; font-weight:500;">&#8592; Back to Dashboard</a>
+</header>
+
+<div class="container">
+
+  <div class="topbar">
+    <div class="tabs">
+      <button class="tab active" onclick="filterTab('all', this)">All</button>
+      <button class="tab" onclick="filterTab('pending', this)">Pending</button>
+      <button class="tab" onclick="filterTab('enriched', this)">Enriched</button>
+      <button class="tab" onclick="filterTab('approved', this)">Approved</button>
+      <button class="tab" onclick="filterTab('rejected', this)">Rejected</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-bubble pending"><div class="num" id="stat-pending">{{ pending|length }}</div><div class="label">Pending</div></div>
+    <div class="stat-bubble enriched"><div class="num" id="stat-enriched">{{ enriched|length }}</div><div class="label">Enriched</div></div>
+    <div class="stat-bubble approved"><div class="num">{{ approved|length }}</div><div class="label">Approved</div></div>
+    <div class="stat-bubble rejected"><div class="num">{{ rejected|length }}</div><div class="label">Rejected</div></div>
+  </div>
+
+  <div class="actions-bar">
+    <button class="primary" onclick="approveAllEnriched()">Approve All Enriched</button>
+    <button class="success" onclick="applyToNeon()">Apply to Neon &#8594;</button>
+    <button class="danger-outline" onclick="rejectAllEnriched()">Reject All Enriched</button>
+    <span style="margin-left:auto;font-size:12px;color:var(--text-muted)">Click &#10003; or &#10005; per link to accept/reject individually</span>
+  </div>
+
+  <div id="task-list" class="task-list"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // All tasks merged from all statuses
+  const allTasks = {{ (pending + enriched + approved + rejected)|tojson }};
+  let currentFilter = 'all';
+
+  function filterTab(tab, el) {
+    currentFilter = tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    renderTasks();
+  }
+
+  function getSourceClass(src) {
+    if (src === 'media') return 'media';
+    if (src === 'journalist') return 'journalist';
+    return 'ngo';
+  }
+
+  function isUrlField(f) {
+    return ['website','facebook','twitter','instagram','linkedin','youtube'].includes(f);
+  }
+
+  function isEmailField(f) {
+    return f === 'email';
+  }
+
+  function renderLink(val, field) {
+    if (!val) return '<span class="f-val empty"><empty></span>';
+    if (isUrlField(field)) {
+      const display = val.length > 55 ? val.substring(0, 52) + '…' : val;
+      return `<a href="${val}" target="_blank" rel="noopener" class="link-url">${display}</a>`;
+    }
+    if (isEmailField(field)) {
+      return `<a href="mailto:${val}" target="_blank" class="email-val">${val}</a>`;
+    }
+    return `<span class="f-val">${val}</span>`;
+  }
+
+  function renderTasks() {
+    let tasks = allTasks.filter(t => {
+      if (currentFilter === 'all') return true;
+      return t.status === currentFilter;
+    });
+
+    const el = document.getElementById('task-list');
+    if (tasks.length === 0) {
+      el.innerHTML = '<div class="empty">No tasks in this category.</div>';
+      return;
+    }
+
+    let html = '';
+    tasks.forEach(task => {
+      const r = task.record || {};
+      const name = r.name || r.id || task.task_id || '—';
+      const src = getSourceClass(r.source || '');
+      const found = task.found_fields || {};
+      const approvedFields = task.approved_fields || {};
+      const rejectedFields = task.rejected_fields || [];
+
+      // Determine which fields to show
+      let allFields = [];
+      if (src === 'media') allFields = ['website','facebook','twitter','instagram','linkedin','youtube'];
+      else if (src === 'journalist') allFields = ['email','twitter','linkedin'];
+      else allFields = ['website','email','facebook','linkedin','instagram'];
+
+      // Build field rows
+      let rowsHtml = '';
+      allFields.forEach(f => {
+        const oldVal = r[f] || '';
+        const newVal = found[f] || '';
+        const isApproved = approvedFields[f];
+        const isRejected = rejectedFields.includes(f);
+        const hasFound = !!newVal;
+        const hasOld = !!oldVal;
+        if (!hasFound && !hasOld) return;
+
+        const finalVal = isApproved ? newVal : (isRejected ? oldVal : newVal);
+
+        let valHtml = '';
+        let actionHtml = '';
+
+        if (hasFound && (task.status === 'enriched' || task.status === 'approved' || task.status === 'rejected')) {
+          if (task.status === 'enriched') {
+            // Show found value with per-link approve/reject
+            valHtml = renderLink(finalVal, f);
+            const alreadyActed = isApproved || isRejected;
+            actionHtml = `
+              <div class="link-actions">
+                <button class="success-outline" onclick="approveField('${task.task_id}','${f}')" title="Accept this link" ${isApproved ? 'disabled' : ''}>${isApproved ? '&#10003; OK' : '&#10003;'}</button>
+                <button class="danger-outline" onclick="rejectField('${task.task_id}','${f}')" title="Reject this link" ${isRejected ? 'disabled' : ''}>${isRejected ? '&#10005; NO' : '&#10005;'}</button>
+              </div>`;
+          } else if (task.status === 'approved') {
+            if (isApproved) {
+              valHtml = `<span class="approved-badge">&#10003; ${renderLink(newVal, f)}</span>`;
+            } else if (isRejected) {
+              valHtml = `<span style="color:var(--text-muted);text-decoration:line-through;font-size:12px">${oldVal || '<empty>'}</span> <span class="rejected-badge">&#10005; rejected</span>`;
+            } else {
+              valHtml = renderLink(finalVal, f);
+            }
+          } else if (task.status === 'rejected') {
+            valHtml = `<span class="rejected-badge">&#10005; ${renderLink(oldVal || newVal, f)}</span>`;
+          }
+        } else if (hasOld && !hasFound) {
+          valHtml = `<span class="f-val old">${renderLink(oldVal, f)}</span>`;
+        } else if (hasFound) {
+          valHtml = `<span class="f-val found">${renderLink(finalVal, f)}</span>`;
+        }
+
+        if (!valHtml) return;
+
+        rowsHtml += `<tr>
+          <td class="f-name">${f}</td>
+          <td class="f-val">${valHtml}</td>
+          ${actionHtml ? `<td>${actionHtml}</td>` : '<td></td>'}
+        </tr>`;
+      });
+
+      let actionsHtml = '';
+      if (task.status === 'enriched') {
+        actionsHtml = `
+          <button class="success" onclick="approveTask('${task.task_id}')">&#10003; Approve All</button>
+          <button class="danger-outline" onclick="rejectTask('${task.task_id}')">&#10005; Reject</button>
+          <button class="primary" onclick="applyFieldChoices('${task.task_id}')" style="margin-left:auto">Save Field Choices &#8594;</button>
+        `;
+      } else if (task.status === 'approved') {
+        actionsHtml = `<span class="approved-badge" style="font-size:13px">&#10003; Approved</span>`;
+      } else if (task.status === 'rejected') {
+        actionsHtml = `<span class="rejected-badge" style="font-size:13px">&#10005; Rejected</span>`;
+      }
+
+      html += `<div class="task-card ${task.status}">
+        <div class="task-header">
+          <div class="task-meta">
+            <span class="task-source ${src}">${src}</span>
+            <div class="task-name">${name}</div>
+          </div>
+          <div style="text-align:right">
+            <span class="task-id">${task.task_id || r.id || '—'}</span>
+            <div style="margin-top:4px"><span class="task-status ${task.status}">${task.status}</span></div>
+          </div>
+        </div>
+        ${rowsHtml ? `<table class="field-table"><thead><tr><th>Field</th><th>Value</th><th>Action</th></tr></thead><tbody>${rowsHtml}</tbody></table>` : ''}
+        ${task.status === 'enriched' ? `<div class="task-actions">${actionsHtml}</div>` : ''}
+      </div>`;
+    });
+
+    el.innerHTML = html;
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+  }
+
+  // ── Per-field approve / reject ──
+  function approveField(taskId, field) {
+    fetch(`/api/approve-field/${taskId}/${field}`, {method: 'POST'})
+      .then(r => r.json())
+      .then(d => { toast(`${field}: approved`); renderTasks(); })
+      .catch(() => toast('Error — try again'));
+  }
+
+  function rejectField(taskId, field) {
+    fetch(`/api/reject-field/${taskId}/${field}`, {method: 'POST'})
+      .then(r => r.json())
+      .then(d => { toast(`${field}: rejected`); renderTasks(); })
+      .catch(() => toast('Error — try again'));
+  }
+
+  function applyFieldChoices(taskId) {
+    fetch(`/api/apply-field-choices/${taskId}`, {method: 'POST'})
+      .then(r => r.json())
+      .then(d => { toast(`Choices saved`); renderTasks(); })
+      .catch(() => toast('Error — try again'));
+  }
+
+  // ── Whole-task actions ──
+  function approveTask(taskId) {
+    fetch(`/api/approve/${taskId}`, {method: 'POST'})
+      .then(r => r.json())
+      .then(d => { toast(`Approved`); renderTasks(); });
+  }
+
+  function rejectTask(taskId) {
+    fetch(`/api/reject/${taskId}`, {method: 'POST'})
+      .then(r => r.json())
+      .then(d => { toast(`Rejected`); renderTasks(); });
+  }
+
+  function approveAllEnriched() {
+    const enriched = allTasks.filter(t => t.status === 'enriched');
+    if (!enriched.length) { toast('No enriched tasks to approve'); return; }
+    Promise.all(enriched.map(t => fetch(`/api/approve/${t.task_id}`, {method: 'POST'}).then(r => r.json())))
+      .then(() => { toast(`Approved ${enriched.length} tasks`); setTimeout(() => location.reload(), 500); });
+  }
+
+  function rejectAllEnriched() {
+    const enriched = allTasks.filter(t => t.status === 'enriched');
+    if (!enriched.length) { toast('No enriched tasks to reject'); return; }
+    Promise.all(enriched.map(t => fetch(`/api/reject/${t.task_id}`, {method: 'POST'}).then(r => r.json())))
+      .then(() => { toast(`Rejected ${enriched.length} tasks`); setTimeout(() => location.reload(), 500); });
+  }
+
+  function applyToNeon() {
+    fetch('/api/apply-to-neon', {method: 'POST'})
+      .then(r => r.json())
+      .then(d => toast(`Done! SQL: ${d.sql_file}`));
+  }
+
+  renderTasks();
+</script>
+
+</body>
+</html>

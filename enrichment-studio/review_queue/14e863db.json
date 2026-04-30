@@ -1,0 +1,19 @@
+{
+  "task_id": "14e863db",
+  "record": {
+    "id": "197",
+    "name": "Parallaxi Mag",
+    "website": "https://parallaximag.gr/",
+    "type": "",
+    "geo": "",
+    "facebook": "https://www.facebook.com/Parallaximag/",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/parallaximag/",
+    "linkedin": "https://gr.linkedin.com/company/parallaxi-mag",
+    "youtube": ""
+  },
+  "field": "all",
+  "status": "enriched+4",
+  "result": {"website": "https://parallaximag.gr/", "facebook": "https://www.facebook.com/Parallaximag/", "instagram": "https://www.instagram.com/parallaximag/", "linkedin": "https://gr.linkedin.com/company/parallaxi-mag"},
+  "created": "2026-04-29T15:13:42.289604"
+}

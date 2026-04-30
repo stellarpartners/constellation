@@ -1,0 +1,5 @@
+{
+  "status": "enriched",
+  "found_fields": {"website": "https://agro24.gr/", "facebook": "@agro24gr", "twitter": "@agro24gr", "instagram": "@agro24", "linkedin": "https://www.linkedin.com/company/agro24", "email": "info@agro24.gr"},
+  "result": {"name": "agro24.gr", "website": "https://agro24.gr/", "facebook": "@agro24gr", "twitter": "@agro24gr", "instagram": "@agro24", "linkedin": "https://www.linkedin.com/company/agro24", "email": "info@agro24.gr"}
+}

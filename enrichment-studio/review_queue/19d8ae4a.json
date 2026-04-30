@@ -1,0 +1,30 @@
+{
+  "task_id": "19d8ae4a",
+  "record": {
+    "id": "Ίδρυμα Κώστα Ανδρέου",
+    "name": "Ίδρυμα Κώστα Ανδρέου",
+    "website": "https://andreoufoundation.org/",
+    "email": "info@andreoufoundation.org",
+    "facebook": "https://www.facebook.com/pages/Ίδρυμα-Κώστα-Ανδρέου/166971170020445",
+    "linkedin": "https://www.linkedin.com/company/costas-andreou-foundation/",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email,facebook,instagram",
+  "status": "enriched",
+  "result": {
+    "name": "Ίδρυμα Κώστα Ανδρέου",
+    "website": "https://andreoufoundation.org/",
+    "facebook": "https://www.facebook.com/pages/Ίδρυμα-Κώστα-Ανδρέου/166971170020445",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/costas-andreou-foundation/",
+    "email": "info@andreoufoundation.org"
+  },
+  "found_fields": {
+    "email": "info@andreoufoundation.org",
+    "facebook": "https://www.facebook.com/pages/Ίδρυμα-Κώστα-Ανδρέου/166971170020445"
+  },
+  "created": "2026-04-29T15:10:50.268839",
+  "enriched_at": "2026-04-29T15:10:50.268839"
+}

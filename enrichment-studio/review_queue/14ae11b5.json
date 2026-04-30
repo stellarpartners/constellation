@@ -1,0 +1,16 @@
+{
+  "task_id": "14ae11b5",
+  "record": {
+    "id": "SOLIDARITYNOW",
+    "name": "SOLIDARITYNOW",
+    "website": "https://www.solidaritynow.org/",
+    "email": "athens@solidaritynow.org",
+    "facebook": "https://www.facebook.com/SolidarityNow/",
+    "linkedin": "https://www.linkedin.com/company/solidaritynow/",
+    "instagram": ""
+  },
+  "field": "email",
+  "status": "enriched+1",
+  "result": {"email": "athens@solidaritynow.org"},
+  "created": "2026-04-29T15:10:50.320006"
+}

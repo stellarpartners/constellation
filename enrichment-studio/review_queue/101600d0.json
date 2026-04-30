@@ -1,0 +1,26 @@
+{
+  "task_id": "101600d0",
+  "record": {
+    "id": "Άθυρμα",
+    "name": "Άθυρμα",
+    "website": "http://www.athirma.com/",
+    "email": "info@playtherapy.gr",
+    "facebook": "https://www.facebook.com/Athirma.ngo/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/athirmagreece/",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "website": "http://www.athirma.com/",
+    "email": "info@playtherapy.gr",
+    "facebook": "https://www.facebook.com/Athirma.ngo/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/athirmagreece/"
+  },
+  "found_fields": ["email"],
+  "created": "2026-04-29T15:10:50.260598"
+}

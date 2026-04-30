@@ -1,0 +1,17 @@
+{
+  "task_id": "195fc718",
+  "record": {
+    "id": "Παιδικό Φεστιβάλ Κινηματογράφου Αθήνας",
+    "name": "Παιδικό Φεστιβάλ Κινηματογράφου Αθήνας",
+    "website": "https://www.athicff.com/",
+    "email": "info@athicff.com",
+    "facebook": "https://www.facebook.com/athicff",
+    "linkedin": "",
+    "instagram": "https://www.instagram.com/athicff",
+    "source": "ngo"
+  },
+  "field": "email,facebook,instagram",
+  "status": "enriched3found_email_facebook_instagram_result_found_info@athicff.com_facebook_athicff_instagram_athicff",
+  "result": "Email: info@athicff.com | Facebook: https://www.facebook.com/athicff | Instagram: https://www.instagram.com/athicff | LinkedIn: Not found",
+  "created": "2026-04-29T15:10:50.308257"
+}

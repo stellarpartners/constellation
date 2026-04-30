@@ -1,0 +1,24 @@
+{
+  "task_id": "0eba6c8e",
+  "record": {
+    "id": "Mazí Housing",
+    "name": "Mazí Housing",
+    "website": "https://mazihousingproject.org/",
+    "email": "",
+    "facebook": "https://www.facebook.com/mazihousingproject/",
+    "linkedin": "https://www.linkedin.com/company/mazihousing/",
+    "instagram": "https://www.instagram.com/mazihousingproject/"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "website": "https://www.tanea.gr/",
+    "email": "mazihousingproject@gmail.com",
+    "facebook": "",
+    "twitter": "",
+    "instagram": ""
+  },
+  "found_fields": ["email"],
+  "not_found_fields": ["facebook", "twitter", "instagram"],
+  "created": "2026-04-29T15:10:50.296129"
+}

@@ -1,0 +1,22 @@
+{
+  "task_id": "167c352a",
+  "record": {
+    "id": "IsraAID",
+    "name": "IsraAID",
+    "website": "https://www.israaid.org/",
+    "email": "info@israaid.org",
+    "facebook": "https://www.facebook.com/israaid/",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched_email_facebook_result:2_found_0_missing",
+  "result": {
+    "email": "info@israaid.org",
+    "facebook": "https://www.facebook.com/israaid/",
+    "linkedin": null,
+    "instagram": null
+  },
+  "created": "2026-04-29T15:10:50.315426"
+}

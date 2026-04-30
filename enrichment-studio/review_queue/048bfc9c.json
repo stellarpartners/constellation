@@ -1,0 +1,27 @@
+{
+  "task_id": "048bfc9c",
+  "record": {
+    "id": "Homo Evolution",
+    "name": "Homo Evolution",
+    "website": "https://homoevolution.com/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "id": "Homo Evolution",
+    "name": "Homo Evolution",
+    "website": "https://homoevolution.com/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "created": "2026-04-29T15:10:50.287315",
+  "found_fields": {}
+}

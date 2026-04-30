@@ -1,0 +1,37 @@
+{
+  "task_id": "09a2e1e0",
+  "record": {
+    "id": "202",
+    "name": "YgeiaWatch",
+    "website": "https://www.ygeiawatch.com.cy",
+    "type": "",
+    "geo": "",
+    "facebook": "https://pt-br.facebook.com/YgeiaWatchCyprus",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/ygeiawatch/",
+    "linkedin": "https://cy.linkedin.com/company/ygeiawatch",
+    "youtube": "https://www.youtube.com/channel/UCVxVvcJQz0hYIydqHbEF5jA"
+  },
+  "field": "all",
+  "status": "enriched",
+  "result": {
+    "id": "202",
+    "name": "YgeiaWatch",
+    "website": "https://www.ygeiawatch.com.cy",
+    "type": "",
+    "geo": "",
+    "facebook": "https://pt-br.facebook.com/YgeiaWatchCyprus",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/ygeiawatch/",
+    "linkedin": "https://cy.linkedin.com/company/ygeiawatch",
+    "youtube": "https://www.youtube.com/channel/UCVxVvcJQz0hYIydqHbEF5jA"
+  },
+  "found_fields": {
+    "website": "https://www.ygeiawatch.com.cy",
+    "facebook": "https://pt-br.facebook.com/YgeiaWatchCyprus",
+    "instagram": "https://www.instagram.com/ygeiawatch/",
+    "linkedin": "https://cy.linkedin.com/company/ygeiawatch",
+    "youtube": "https://www.youtube.com/channel/UCVxVvcJQz0hYIydqHbEF5jA"
+  },
+  "created": "2026-04-29T15:13:42.292388"
+}

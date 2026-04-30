@@ -1,0 +1,27 @@
+{
+  "task_id": "0df0d502",
+  "record": {
+    "id": "Κοινωνία Δημοκρατικής Συμμετοχής",
+    "name": "Κοινωνία Δημοκρατικής Συμμετοχής",
+    "website": "https://www.koinoniads.org/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "id": "Κοινωνία Δημοκρατικής Συμμετοχής",
+    "name": "Κοινωνία Δημοκρατικής Συμμετοχής",
+    "website": "https://www.koinoniads.org/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "found_fields": {},
+  "created": "2026-04-29T15:10:50.315883"
+}

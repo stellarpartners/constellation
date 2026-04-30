@@ -1,0 +1,5 @@
+{
+  "status": "enriched",
+  "found_fields": {"twitter": "@KomvosNode", "instagram": "@komvosnode", "email": "contact@komvos-node.org"},
+  "result": {"name": "Κόμβος", "website": "https://komvos-node.org/", "facebook": "https://www.facebook.com/KomvosNode", "twitter": "@KomvosNode", "instagram": "@komvosnode", "linkedin": "https://www.linkedin.com/company/komvos-node/", "email": "contact@komvos-node.org"}
+}

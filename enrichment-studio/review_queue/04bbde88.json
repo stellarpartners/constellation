@@ -1,0 +1,27 @@
+{
+  "task_id": "04bbde88",
+  "record": {
+    "id": "Σύλλογος Φίλων Ασθενών με Πρωτοπαθείς Ανοσοανεπάρκειες & Παιδιατρικής Ανοσολογίας \"Η Αρμονία\"",
+    "name": "Σύλλογος Φίλων Ασθενών με Πρωτοπαθείς Ανοσοανεπάρκειες & Παιδιατρικής Ανοσολογίας \"Η Αρμονία\"",
+    "website": "https://armoniaanosia.gr/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "approved",
+  "result": {
+    "website": "https://armoniaanosia.gr/",
+    "facebook": null,
+    "twitter": null,
+    "instagram": null,
+    "linkedin": null,
+    "email": "armonia.anosia@gmail.com"
+  },
+  "created": "2026-04-29T15:10:50.271673",
+  "found_fields": {
+    "email": "armonia.anosia@gmail.com"
+  }
+}

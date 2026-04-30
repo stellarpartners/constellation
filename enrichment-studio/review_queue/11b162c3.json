@@ -1,0 +1,24 @@
+{
+  "task_id": "11b162c3",
+  "record": {
+    "id": "202",
+    "name": "YgeiaWatch",
+    "website": "https://www.ygeiawatch.com.cy/",
+    "type": "",
+    "geo": "",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "approved",
+  "result": {
+    "found_fields": {
+      "website": "https://www.ygeiawatch.com.cy/"
+    }
+  },
+  "created": "2026-04-29T14:23:16.257018"
+}

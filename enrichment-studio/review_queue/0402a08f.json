@@ -1,0 +1,16 @@
+{
+  "task_id": "0402a08f",
+  "record": {
+    "id": "Συζωή",
+    "name": "Συζωή",
+    "website": "https://syzoi.gr/",
+    "email": "syzoi@syzoi.gr",
+    "facebook": "https://www.facebook.com/syzoi.syzoi",
+    "linkedin": "https://www.linkedin.com/in/%CF%83%CF%85%CE%B6%CF%89%CE%B7-syzoi/",
+    "instagram": "https://www.instagram.com/syzoi/"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": null,
+  "created": "2026-04-29T15:10:50.303725"
+}

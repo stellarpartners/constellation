@@ -1,0 +1,28 @@
+{
+  "task_id": "0fc3d862",
+  "record": {
+    "id": "213",
+    "name": "Libre",
+    "website": "https://thelibreinitiative.com/",
+    "type": "",
+    "geo": "",
+    "facebook": "https://www.facebook.com/theLIBREinitiative/",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/wearelibre/",
+    "linkedin": "https://www.linkedin.com/company/the-libre-initiative",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "enriched",
+  "result": {
+    "website": "https://thelibreinitiative.com/",
+    "email": "info@belibre.org",
+    "facebook": "https://www.facebook.com/theLIBREinitiative/",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/wearelibre/",
+    "linkedin": "https://www.linkedin.com/company/the-libre-initiative"
+  },
+  "found_fields": ["website", "email", "facebook", "instagram", "linkedin"],
+  "created": "2026-04-29T15:13:42.280874"
+}

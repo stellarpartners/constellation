@@ -1,0 +1,24 @@
+{
+  "task_id": "0de53e5e",
+  "record": {
+    "id": "200",
+    "name": "Justina",
+    "website": "",
+    "type": "",
+    "geo": "",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "approved",
+  "result": {
+    "found_fields": {
+      "website": "https://officialjustina.com/"
+    }
+  },
+  "created": "2026-04-29T14:23:16.256414"
+}

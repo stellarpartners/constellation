@@ -1,0 +1,21 @@
+{
+  "task_id": "14064f61",
+  "record": {
+    "id": "Ινστιτούτο Πολιτικής Υγείας",
+    "name": "Ινστιτούτο Πολιτικής Υγείας",
+    "website": "https://www.healthpolicyinstitute.eu/",
+    "email": "info@healthpolicyinstitute.eu",
+    "facebook": "https://www.facebook.com/HealthPolicyInstitute/",
+    "linkedin": "https://www.linkedin.com/company/health-policy-institute-eu/",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched+3fields",
+  "result": {
+    "email": "info@healthpolicyinstitute.eu",
+    "facebook": "https://www.facebook.com/HealthPolicyInstitute/",
+    "linkedin": "https://www.linkedin.com/company/health-policy-institute-eu/"
+  },
+  "created": "2026-04-29T15:10:50.314166"
+}

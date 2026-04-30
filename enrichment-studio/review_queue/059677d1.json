@@ -1,0 +1,40 @@
+{
+  "task_id": "059677d1",
+  "record": {
+    "id": "201",
+    "name": "Social Policy",
+    "website": "",
+    "type": "",
+    "geo": "",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "rejected",
+  "result": {
+    "website": "https://socialpolicy.gr",
+    "facebook": "https://www.facebook.com/groups/423170411110629/",
+    "twitter": "https://x.com/socpolicy",
+    "instagram": null,
+    "linkedin": null,
+    "youtube": null,
+    "email": [
+      "andounis@socialpolicy.gr",
+      "info@socialpolicy.gr"
+    ]
+  },
+  "created": "2026-04-29T15:13:42.276447",
+  "found_fields": {
+    "website": "https://socialpolicy.gr",
+    "facebook": "https://www.facebook.com/groups/423170411110629/",
+    "twitter": "https://x.com/socpolicy",
+    "email": [
+      "andounis@socialpolicy.gr",
+      "info@socialpolicy.gr"
+    ]
+  }
+}

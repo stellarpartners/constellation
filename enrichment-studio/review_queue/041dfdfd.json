@@ -1,0 +1,32 @@
+{
+  "task_id": "041dfdfd",
+  "record": {
+    "id": "ΜΕΙΝΕ ΔΥΝΑΤΟΣ",
+    "name": "ΜΕΙΝΕ ΔΥΝΑΤΟΣ",
+    "website": "https://www.bestrong.org.gr/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "id": "ΜΕΙΝΕ ΔΥΝΑΤΟΣ",
+    "name": "ΜΕΙΝΕ ΔΥΝΑΤΟΣ",
+    "website": "https://www.bestrong.org.gr/",
+    "email": "info@bestrong.org.gr",
+    "facebook": "http://www.facebook.com/pages/ΜΕΙΝΕ-ΔΥΝΑΤΟΣ/26055437774",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo",
+    "twitter": "http://twitter.com/#!/be_strong"
+  },
+  "created": "2026-04-29T15:10:50.308768",
+  "found_fields": {
+    "email": "info@bestrong.org.gr",
+    "facebook": "http://www.facebook.com/pages/ΜΕΙΝΕ-ΔΥΝΑΤΟΣ/26055437774",
+    "twitter": "http://twitter.com/#!/be_strong"
+  }
+}

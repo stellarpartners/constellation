@@ -1,0 +1,30 @@
+{
+  "task_id": "1d32e681",
+  "record": {
+    "id": "Institute of Prevention and Development",
+    "name": "Institute of Prevention and Development",
+    "website": "https://www.ipd.gr/",
+    "email": "info@ipd.gr",
+    "facebook": "https://www.facebook.com/ipd.gr",
+    "linkedin": "https://gr.linkedin.com/company/institute-of-prevention-and-development-ipd",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email,linkedin,instagram",
+  "status": "enriched",
+  "result": {
+    "name": "Institute of Prevention and Development",
+    "website": "https://www.ipd.gr/",
+    "facebook": "https://www.facebook.com/ipd.gr",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://gr.linkedin.com/company/institute-of-prevention-and-development-ipd",
+    "email": "info@ipd.gr"
+  },
+  "found_fields": {
+    "email": "info@ipd.gr",
+    "linkedin": "https://gr.linkedin.com/company/institute-of-prevention-and-development-ipd"
+  },
+  "created": "2026-04-29T15:10:50.315312",
+  "enriched_at": "2026-04-29T15:10:50.315312"
+}

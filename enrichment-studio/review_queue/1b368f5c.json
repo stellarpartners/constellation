@@ -1,0 +1,30 @@
+{
+  "task_id": "1b368f5c",
+  "record": {
+    "id": "Spirit of The Game",
+    "name": "Spirit of The Game",
+    "website": "https://spiritofthegame.org/",
+    "email": "SotGFoundation@gmail.com",
+    "facebook": "https://www.facebook.com/SotGFoundation/",
+    "linkedin": "https://www.linkedin.com/company/spirit-of-the-game-foundation-greece/",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email,facebook,instagram",
+  "status": "enriched",
+  "result": {
+    "name": "Spirit of The Game",
+    "website": "https://spiritofthegame.org/",
+    "facebook": "https://www.facebook.com/SotGFoundation/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/spirit-of-the-game-foundation-greece/",
+    "email": "SotGFoundation@gmail.com"
+  },
+  "found_fields": {
+    "email": "SotGFoundation@gmail.com",
+    "facebook": "https://www.facebook.com/SotGFoundation/"
+  },
+  "created": "2026-04-29T15:10:50.303207",
+  "enriched_at": "2026-04-29T15:10:50.303207"
+}

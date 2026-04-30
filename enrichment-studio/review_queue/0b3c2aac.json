@@ -1,0 +1,24 @@
+{
+  "task_id": "0b3c2aac",
+  "record": {
+    "id": "Art of Hosting Athina",
+    "name": "Art of Hosting Athina",
+    "website": "https://aohathina.com/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": ""
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "website": "https://aohathina.com/",
+    "email": "contact@aoh-athens.gr",
+    "facebook": "https://www.facebook.com/aohAthens",
+    "twitter": "",
+    "instagram": ""
+  },
+  "found_fields": ["email", "facebook"],
+  "not_found_fields": ["twitter", "linkedin", "instagram"],
+  "created": "2026-04-29T15:10:50.270635"
+}

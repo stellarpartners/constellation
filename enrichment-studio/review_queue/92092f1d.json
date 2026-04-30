@@ -1,0 +1,17 @@
+{
+  "task_id": "92092f1d",
+  "record": {
+    "id": "ngoHeroes",
+    "name": "ngoHeroes",
+    "website": "https://ngoheroes.gr/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "https://www.linkedin.com/company/ngoheroes/",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "pending",
+  "result": null,
+  "created": "2026-04-29T15:10:50.298106"
+}

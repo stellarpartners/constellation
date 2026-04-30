@@ -1,0 +1,27 @@
+{
+  "task_id": "058806f3",
+  "record": {
+    "id": "PHILARTIA",
+    "name": "PHILARTIA",
+    "website": "https://philartia.gr/",
+    "email": "welcomephilartia@gmail.com",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": ""
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "id": "PHILARTIA",
+    "name": "PHILARTIA",
+    "website": "https://philartia.gr/",
+    "email": "welcomephilartia@gmail.com",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": ""
+  },
+  "found_fields": {
+    "email": "welcomephilartia@gmail.com"
+  },
+  "created": "2026-04-29T15:10:50.300717"
+}

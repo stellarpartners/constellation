@@ -1,0 +1,27 @@
+{
+  "task_id": "10e4bb0b",
+  "record": {
+    "id": "191",
+    "name": "Underwriter.gr",
+    "website": "https://underwriter.gr/",
+    "type": "media",
+    "geo": "Greece",
+    "facebook": "https://www.facebook.com/underwriter.gr/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "enriched_all",
+  "result": {
+    "website": "https://underwriter.gr/",
+    "facebook": "https://www.facebook.com/underwriter.gr/",
+    "email": "hello@underwriter.gr",
+    "phone": "+30 210 6019070",
+    "address": "Ύδρας 14, 15343 Αγία Παρασκευή"
+  },
+  "created": "2026-04-29T15:13:42.277530",
+  "enriched_at": "2026-04-29T15:13:42.277530"
+}

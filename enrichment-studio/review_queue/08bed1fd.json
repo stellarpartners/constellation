@@ -1,0 +1,27 @@
+{
+  "task_id": "08bed1fd",
+  "record": {
+    "id": "Αναγέννηση και Πρόοδος",
+    "name": "Αναγέννηση και Πρόοδος",
+    "website": "https://www.randp.gr/",
+    "email": "",
+    "facebook": "https://www.facebook.com/randp.gr/",
+    "linkedin": "https://www.linkedin.com/company/%CE%B1%CE%BD%CE%B1%CE%B3%CE%AD%CE%BD%CE%BD%CE%B7%CF%83%CE%B7-%CF%80%CF%8C%CE%BF%CE%B4%CE%BF%CF%82-regeneration-progress/",
+    "instagram": "https://www.instagram.com/randp_gr/",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "website": "https://www.randp.gr/",
+    "facebook": "https://www.facebook.com/randp.gr/",
+    "twitter": null,
+    "instagram": "https://www.instagram.com/randp_gr/",
+    "linkedin": "https://www.linkedin.com/company/%CE%B1%CE%BD%CE%B1%CE%B3%CE%AD%CE%BD%CE%BD%CE%B7%CF%83%CE%B7-%CF%80%CF%8C%CE%BF%CE%B4%CE%BF%CF%82-regeneration-progress/",
+    "email": "traumaedu@randp.gr"
+  },
+  "created": "2026-04-29T15:10:50.319083",
+  "found_fields": {
+    "email": "traumaedu@randp.gr"
+  }
+}

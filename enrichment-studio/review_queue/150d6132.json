@@ -1,0 +1,16 @@
+{
+  "task_id": "150d6132",
+  "record": {
+    "id": "AMURTEL Greece",
+    "name": "AMURTEL Greece",
+    "website": "https://greece.amurtel.org/",
+    "email": "amurtel.gr.donations@amurtel.org",
+    "facebook": "https://www.facebook.com/AMURTEL.Greece/",
+    "linkedin": "https://www.linkedin.com/company/amurtel-greece/",
+    "instagram": "https://www.instagram.com/amurtel.gr/"
+  },
+  "field": "email",
+  "status": "enriched+1",
+  "result": {"email": "amurtel.gr.donations@amurtel.org"},
+  "created": "2026-04-29T15:10:50.285759"
+}

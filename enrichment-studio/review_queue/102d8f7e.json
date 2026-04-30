@@ -1,0 +1,26 @@
+{
+  "task_id": "102d8f7e",
+  "record": {
+    "id": "Ελληνική Εταιρεία Καρκίνου Πνεύμονα (ΕΛΕΚΑΠ)",
+    "name": "Ελληνική Εταιρεία Καρκίνου Πνεύμονα (ΕΛΕΚΑΠ)",
+    "website": "https://elekap.org/",
+    "email": "info@elekap.org",
+    "facebook": "https://www.facebook.com/elekapLC/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/elekap/",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "website": "https://elekap.org/",
+    "email": "info@elekap.org",
+    "facebook": "https://www.facebook.com/elekapLC/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "https://www.linkedin.com/company/elekap/"
+  },
+  "found_fields": ["email"],
+  "created": "2026-04-29T15:10:50.278480"
+}

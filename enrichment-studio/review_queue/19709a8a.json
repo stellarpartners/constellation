@@ -1,0 +1,32 @@
+{
+  "task_id": "19709a8a",
+  "record": {
+    "id": "196",
+    "name": "Aftodioikisi",
+    "website": "https://www.aftodioikisi.gr/",
+    "type": "media",
+    "geo": "Athens, Greece",
+    "facebook": "https://www.facebook.com/aftodioikisi.gr",
+    "twitter": "https://x.com/aftodioikisi",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "https://www.youtube.com/channel/UCqfUikGm4eTREeOtBQKsJvw/videos",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "approved",
+  "result": {
+    "website": "https://www.aftodioikisi.gr/",
+    "facebook": "https://www.facebook.com/aftodioikisi.gr",
+    "twitter": "https://x.com/aftodioikisi",
+    "youtube": "https://www.youtube.com/channel/UCqfUikGm4eTREeOtBQKsJvw/videos"
+  },
+  "found_fields": {
+    "website": "https://www.aftodioikisi.gr/",
+    "facebook": "https://www.facebook.com/aftodioikisi.gr",
+    "twitter": "https://x.com/aftodioikisi",
+    "youtube": "https://www.youtube.com/channel/UCqfUikGm4eTREeOtBQKsJvw/videos"
+  },
+  "created": "2026-04-29T14:23:16.249928",
+  "enriched_at": "2026-04-29T15:00:00"
+}

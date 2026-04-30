@@ -1,0 +1,514 @@
+[
+  {
+    "id": "1e9e5030",
+    "name": "Avgi",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "1ed04f9f",
+    "name": "Άγγιγμα Ζωής",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "1f14b297",
+    "name": "Διάσωση Ακτής",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "1fa7e654",
+    "name": "Vouliwatch",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2063a238",
+    "name": "Κόμβος",
+    "missing": [
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "20660b74",
+    "name": "Πνοή για το παιδί και την οικογένεια",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "206d2cb2",
+    "name": "Ελληνικό Ίδρυμα Ευρωπαϊκής και Εξωτερικής Πολιτικής (ΕΛΙΑΜΕΠ)",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "21df7ca0",
+    "name": "agro24.gr",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "21ecf6a4",
+    "name": "ΕΘΟΖ - Ἕνωση Θεραπευτῶν Οἰκογένειας καὶ Ζεύγους",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "22028766",
+    "name": "Planeta de TODOS",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "2303ab67",
+    "name": "Tharros News",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "231ece00",
+    "name": "Thessaloniki Pride",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "23675008",
+    "name": "Aegean Rebreath",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "241dabac",
+    "name": "Δίκτυο Αειφόρων Νήσων – ΔΑΦΝΗ",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "25aae540",
+    "name": "LawNet",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2660b4a5",
+    "name": "Στέγη Μέλισσα",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "26889226",
+    "name": "Ελληνική Εταιρεία Kοιλιοκάκης",
+    "missing": [
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "26df0fd2",
+    "name": "Al Itisal",
+    "missing": [
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "27086d71",
+    "name": "Pressenza",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "27475ded",
+    "name": "EMPATHY",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "277fb960",
+    "name": "Karan Creative Media",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "27fc9e53",
+    "name": "Colour Youth - Κοινότητα LGBTQ Νέων Αθήνας",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "2822e3a4",
+    "name": "Metaforespress",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "29a6d32b",
+    "name": "Energymag",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2a4cc207",
+    "name": "SPIN – Space Innovation",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2a51fa33",
+    "name": "Euractive",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2baea4dc",
+    "name": "Σύλλογος Καρκινοπαθών Φλώρινας",
+    "missing": [
+      "website",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2c925828",
+    "name": "Κ.Ε.Φ.Ι.",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2ca63730",
+    "name": "SoSCIety",
+    "missing": [
+      "website",
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2cab9c1d",
+    "name": "Εθελοντική Διακονία Ασθενών",
+    "missing": [
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2cefd2ac",
+    "name": "Δίκτυο για το Δικαίωμα στη Στέγη και την Κατοικία Ελλάδας",
+    "missing": [
+      "website",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2df9b7e1",
+    "name": "Βaumstrasse - Δρόμος με Δέντρα",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "2e1842bb",
+    "name": "Aegean Film Festival",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "2e92db49",
+    "name": "Δύναμη Ζωής",
+    "missing": [
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "2ee212a6",
+    "name": "ONG Proyecto AMAL",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "3024eaab",
+    "name": "Ομάδα Διάσωσης Δέλτα",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "304578f0",
+    "name": "Ο Σπόρος",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "3084bea0",
+    "name": "Vlahotasios Foundation",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "email"
+    ]
+  },
+  {
+    "id": "321f0d80",
+    "name": "Europa Donna Hellas",
+    "missing": [
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "3444d257",
+    "name": "Διεθνής Κοινωνική Υπηρεσία",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "3449ed4d",
+    "name": "Σύλλογος Γονέων Κηδεμόνων και Φίλων Ατόμων με Αυτισμό Ν. Λάρισας",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "35802d30",
+    "name": "Urban Layers",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "35cd8469",
+    "name": "Ελληνική Λέσχη του Βιβλίου",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "35fa9048",
+    "name": "Ελληνικό Αντικαρκινικό Ινστιτούτο",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "36d37c8e",
+    "name": "Εταιρία Μέριμνας & Αποκατάστασης Ατόμων με Ψυχοκοινωνικά Προβλήματα",
+    "missing": [
+      "facebook",
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "370d5e07",
+    "name": "Σύλλογος \"Η Πίστη\"",
+    "missing": [
+      "twitter",
+      "instagram",
+      "linkedin",
+      "email"
+    ]
+  },
+  {
+    "id": "3883aef6",
+    "name": "Με Οδηγό το Διαβήτη",
+    "missing": [
+      "website",
+      "twitter",
+      "instagram"
+    ]
+  },
+  {
+    "id": "38902dfe",
+    "name": "Lean In Network Greece",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "38ef045d",
+    "name": "HUMANNERA",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  },
+  {
+    "id": "390ec571",
+    "name": "Ινστιτούτο Μελέτης της Τοπικής Ιστορίας & της Ιστορίας των Επιχειρήσεων (ΙΜΤΙΙΕ)",
+    "missing": [
+      "twitter",
+      "email"
+    ]
+  }
+]

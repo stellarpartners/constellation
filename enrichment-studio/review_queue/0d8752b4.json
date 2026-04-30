@@ -1,0 +1,35 @@
+{
+  "task_id": "0d8752b4",
+  "record": {
+    "id": "190",
+    "name": "Τύπος Πειραιώς",
+    "website": "https://www.typospeiraiws.gr/",
+    "type": "",
+    "geo": "",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "enriched",
+  "result": {
+    "id": "190",
+    "name": "Τύπος Πειραιώς",
+    "website": "https://www.typospeiraiws.gr/",
+    "type": "",
+    "geo": "",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "found_fields": {
+    "website": "https://www.typospeiraiws.gr/"
+  },
+  "created": "2026-04-29T15:13:42.278881"
+}

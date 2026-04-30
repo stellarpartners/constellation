@@ -1,0 +1,21 @@
+{
+  "task_id": "12e9c540",
+  "record": {
+    "id": "ΤΡΙ.ΕΝΑ πολιτισμού",
+    "name": "ΤΡΙ.ΕΝΑ πολιτισμού",
+    "website": "https://triena-politismou.gr/",
+    "email": "3.1.politismou@gmail.com",
+    "facebook": "https://www.facebook.com/triena.politismou/",
+    "linkedin": "",
+    "instagram": "@trienapolitismou",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched+3fields",
+  "result": {
+    "email": "3.1.politismou@gmail.com",
+    "facebook": "https://www.facebook.com/triena.politismou/",
+    "instagram": "@trienapolitismou"
+  },
+  "created": "2026-04-29T15:10:50.305126"
+}

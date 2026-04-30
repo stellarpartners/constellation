@@ -1,0 +1,36 @@
+{
+  "task_id": "03f2e729",
+  "record": {
+    "id": "144",
+    "name": "ΕΡΤ Τρίπολης",
+    "website": "",
+    "type": "",
+    "geo": "Local",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "approved",
+  "result": {
+    "id": "144",
+    "name": "ΕΡΤ Τρίπολης",
+    "website": "https://www.ertecho.gr/radio/tripoli/",
+    "type": "",
+    "geo": "Local",
+    "facebook": "https://www.facebook.com/erttripolis/",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "created": "2026-04-29T15:13:42.293332",
+  "found_fields": {
+    "website": "https://www.ertecho.gr/radio/tripoli/",
+    "facebook": "https://www.facebook.com/erttripolis/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "cedf8afe",
+  "record": {
+    "id": "DataWo",
+    "name": "DataWo",
+    "website": "https://www.datawo.org/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "https://www.linkedin.com/company/datawo/",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "pending",
+  "result": null,
+  "created": "2026-04-29T15:10:50.310081"
+}

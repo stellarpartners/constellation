@@ -1,0 +1,22 @@
+{
+  "task_id": "167fa6fb",
+  "record": {
+    "id": "Πρόσωπο ΑΜΚΕ",
+    "name": "Πρόσωπο ΑΜΚΕ",
+    "website": "https://www.organismosprosopo.com/",
+    "email": "",
+    "facebook": "",
+    "linkedin": "",
+    "instagram": "",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched_result:0_found_4_missing",
+  "result": {
+    "email": null,
+    "facebook": null,
+    "linkedin": null,
+    "instagram": null
+  },
+  "created": "2026-04-29T15:10:50.318113"
+}

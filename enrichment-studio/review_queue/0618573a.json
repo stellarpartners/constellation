@@ -1,0 +1,24 @@
+{
+  "task_id": "0618573a",
+  "record": {
+    "id": "186",
+    "name": "ygeiamou",
+    "website": "https://www.ygeiamou.gr/",
+    "type": "",
+    "geo": "",
+    "facebook": "",
+    "twitter": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "approved",
+  "result": {
+    "found_fields": {
+      "website": "https://www.ygeiamou.gr/"
+    }
+  },
+  "created": "2026-04-29T14:23:16.257226"
+}

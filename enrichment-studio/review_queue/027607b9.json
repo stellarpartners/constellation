@@ -1,0 +1,16 @@
+{
+  "task_id": "027607b9",
+  "record": {
+    "id": "The Love Van",
+    "name": "The Love Van",
+    "website": "https://thelovevan.com/",
+    "email": "",
+    "facebook": "https://www.facebook.com/thelovevan",
+    "linkedin": "https://www.linkedin.com/company/the-love-van/",
+    "instagram": "https://www.instagram.com/the_love_van/"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": null,
+  "created": "2026-04-29T15:10:50.304361"
+}

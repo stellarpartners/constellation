@@ -1,0 +1,29 @@
+{
+  "task_id": "06a0e5fc",
+  "record": {
+    "id": "Διεθνής Αμνηστία",
+    "name": "Διεθνής Αμνηστία",
+    "website": "https://www.amnesty.gr/",
+    "email": "athens@amnesty.org.gr",
+    "facebook": "https://www.facebook.com/amnestygreece",
+    "linkedin": "https://www.linkedin.com/company/amnesty-international-greece/",
+    "instagram": "https://www.instagram.com/amnestygreece/"
+  },
+  "field": "email",
+  "status": "enriched",
+  "result": {
+    "id": "Διεθνής Αμνηστία",
+    "name": "Διεθνής Αμνηστία",
+    "website": "https://www.amnesty.gr/",
+    "email": "athens@amnesty.org.gr",
+    "facebook": "https://www.facebook.com/amnestygreece",
+    "linkedin": "https://www.linkedin.com/company/amnesty-international-greece/",
+    "instagram": "https://www.instagram.com/amnestygreece/"
+  },
+  "found_fields": {
+    "email": "athens@amnesty.org.gr",
+    "facebook": "https://www.facebook.com/amnestygreece",
+    "instagram": "https://www.instagram.com/amnestygreece/"
+  },
+  "created": "2026-04-29T15:10:50.307076"
+}

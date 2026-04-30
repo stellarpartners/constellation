@@ -1,0 +1,28 @@
+{
+  "task_id": "124d7363",
+  "record": {
+    "id": "214",
+    "name": "Cretalive",
+    "website": "https://www.cretalive.gr",
+    "type": "media/news outlet",
+    "geo": "Crete, Greece (Heraklion)",
+    "facebook": "https://www.facebook.com/cretalive/",
+    "twitter": "https://www.twitter.com/cretalive/",
+    "instagram": "https://www.instagram.com/cretalive/",
+    "linkedin": "",
+    "youtube": "https://www.youtube.com/channel/UCmzaIE6UCdRguV2hYXxDl_A",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "enriched",
+  "result": {
+    "website": "https://www.cretalive.gr",
+    "facebook": "https://www.facebook.com/cretalive/",
+    "twitter": "https://www.twitter.com/cretalive/",
+    "instagram": "https://www.instagram.com/cretalive/",
+    "youtube": "https://www.youtube.com/channel/UCmzaIE6UCdRguV2hYXxDl_A",
+    "type": "media/news outlet",
+    "geo": "Crete, Greece (Heraklion)"
+  },
+  "created": "2026-04-29T14:23:16.250228"
+}

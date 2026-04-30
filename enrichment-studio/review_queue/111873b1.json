@@ -1,0 +1,23 @@
+{
+  "task_id": "111873b1",
+  "record": {
+    "id": "Syrian & Greek Youth Forum (SGYF)",
+    "name": "Syrian & Greek Youth Forum (SGYF)",
+    "website": "https://sgyf.org/",
+    "email": "syriangreekyouthforum@gmail.com",
+    "facebook": "https://www.facebook.com/SGYF2019/",
+    "linkedin": "https://www.linkedin.com/company/the-syrian-and-greek-youth-forum-%D9%85%D9%84%D8%AA%D9%82%D9%89-%D8%A7%D9%84%D8%B4%D8%A8%D8%A7%D8%A8-%D8%A7%D9%84%D8%B3%D9%88%D8%B1%D9%8A-%D9%88%D8%A7%D9%84%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A/",
+    "instagram": "https://www.instagram.com/sgyf.city/",
+    "twitter": "https://x.com/syrian_greek",
+    "source": "ngo"
+  },
+  "field": "email,instagram,twitter",
+  "status": "enriched_email_instagram_twitter",
+  "result": {
+    "email": "syriangreekyouthforum@gmail.com",
+    "instagram": "https://www.instagram.com/sgyf.city/",
+    "twitter": "https://x.com/syrian_greek"
+  },
+  "created": "2026-04-29T15:10:50.302424",
+  "enriched_at": "2026-04-29T15:10:50.302424"
+}

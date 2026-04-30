@@ -1,0 +1,27 @@
+{
+  "task_id": "cfcb80e3",
+  "record": {
+    "id": "199",
+    "name": "Pressenza",
+    "website": "https://www.pressenza.com/",
+    "type": "international_press_agency",
+    "geo": "Athens, Greece / International",
+    "facebook": "https://www.facebook.com/PressenzaEnglish",
+    "twitter": "@PressenzaIPA",
+    "instagram": "https://www.instagram.com/pressenza_eng/",
+    "linkedin": "https://www.linkedin.com/company/pressenza"
+  },
+  "field": "website",
+  "status": "rejected",
+  "result": {
+    "found_fields": {
+      "website": "https://www.pressenza.com/",
+      "facebook": "https://www.facebook.com/PressenzaEnglish",
+      "twitter": "@PressenzaIPA",
+      "instagram": "https://www.instagram.com/pressenza_eng/",
+      "linkedin": "https://www.linkedin.com/company/pressenza"
+    }
+  },
+  "created": "2026-04-29T14:23:16.250639",
+  "enriched_at": "2026-04-29T14:30:00"
+}

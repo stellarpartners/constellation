@@ -1,0 +1,27 @@
+{
+  "task_id": "45b6f5e8",
+  "record": {
+    "id": "205",
+    "name": "Etheas",
+    "website": "https://etheas.gr/",
+    "type": "agricultural_cooperatives_union",
+    "geo": "Athens, Greece",
+    "facebook": "https://www.facebook.com/etheas.gr",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/etheas__/",
+    "linkedin": "https://www.linkedin.com/company/national-union-of-agricultural-cooperatives-of-greece-etheas/",
+    "youtube": ""
+  },
+  "field": "website",
+  "status": "enriched",
+  "result": {
+    "found_fields": {
+      "website": "https://etheas.gr/",
+      "facebook": "https://www.facebook.com/etheas.gr",
+      "instagram": "https://www.instagram.com/etheas__/",
+      "linkedin": "https://www.linkedin.com/company/national-union-of-agricultural-cooperatives-of-greece-etheas/"
+    }
+  },
+  "created": "2026-04-29T14:23:16.250506",
+  "enriched_at": "2026-04-29T14:30:00"
+}

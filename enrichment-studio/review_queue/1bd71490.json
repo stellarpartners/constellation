@@ -1,0 +1,35 @@
+{
+  "task_id": "1bd71490",
+  "record": {
+    "id": "205",
+    "name": "Etheas",
+    "website": "https://etheas.gr/",
+    "type": "",
+    "geo": "",
+    "facebook": "https://www.facebook.com/etheas.gr/",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/etheas__/",
+    "linkedin": "https://gr.linkedin.com/company/national-union-of-agricultural-cooperatives-of-greece-etheas",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "all",
+  "status": "approved",
+  "result": {
+    "name": "Etheas",
+    "website": "https://etheas.gr/",
+    "facebook": "https://www.facebook.com/etheas.gr/",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/etheas__/",
+    "linkedin": "https://gr.linkedin.com/company/national-union-of-agricultural-cooperatives-of-greece-etheas",
+    "email": ""
+  },
+  "found_fields": {
+    "website": "https://etheas.gr/",
+    "facebook": "https://www.facebook.com/etheas.gr/",
+    "instagram": "https://www.instagram.com/etheas__/",
+    "linkedin": "https://gr.linkedin.com/company/national-union-of-agricultural-cooperatives-of-greece-etheas"
+  },
+  "created": "2026-04-29T15:13:42.275314",
+  "enriched_at": "2026-04-29T15:13:42.275314"
+}

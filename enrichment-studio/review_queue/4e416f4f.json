@@ -1,0 +1,32 @@
+{
+  "task_id": "4e416f4f",
+  "record": {
+    "id": "203",
+    "name": "Agrocapital",
+    "website": "https://www.agrocapital.gr/",
+    "type": "media",
+    "geo": "Athens, Greece",
+    "facebook": "https://www.facebook.com/agrocapital",
+    "twitter": "",
+    "instagram": "https://www.instagram.com/agrocapital/",
+    "linkedin": "https://gr.linkedin.com/company/agrocapital-gr",
+    "youtube": "",
+    "source": "media"
+  },
+  "field": "website",
+  "status": "enriched",
+  "result": {
+    "website": "https://www.agrocapital.gr/",
+    "facebook": "https://www.facebook.com/agrocapital",
+    "instagram": "https://www.instagram.com/agrocapital/",
+    "linkedin": "https://gr.linkedin.com/company/agrocapital-gr"
+  },
+  "found_fields": {
+    "website": "https://www.agrocapital.gr/",
+    "facebook": "https://www.facebook.com/agrocapital",
+    "instagram": "https://www.instagram.com/agrocapital/",
+    "linkedin": "https://gr.linkedin.com/company/agrocapital-gr"
+  },
+  "created": "2026-04-29T14:23:16.250067",
+  "enriched_at": "2026-04-29T15:00:00"
+}

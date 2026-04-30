@@ -1,0 +1,17 @@
+{
+  "task_id": "16f85a9f",
+  "record": {
+    "id": "Save The Water",
+    "name": "Save The Water",
+    "website": "https://www.savethewater.eu/",
+    "email": "info@savethewater.org",
+    "facebook": "https://www.facebook.com/profile.php?id=61551469011917",
+    "linkedin": "https://www.linkedin.com/company/save-the-water-save-our-future-non-profit-organization/",
+    "instagram": "https://www.instagram.com/savethewater.eu",
+    "source": "ngo"
+  },
+  "field": "email",
+  "status": "enriched1found_email_result_found_info@savethewater.org",
+  "result": "info@savethewater.org",
+  "created": "2026-04-29T15:10:50.319581"
+}
