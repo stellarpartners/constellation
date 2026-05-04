@@ -189,6 +189,12 @@ interface OKOIPRecord {
   purpose:           string | null;
   grant_value:       number | null;
   available_value:   number | null;
+  // Dates (epoch ms)
+  incorporation_date_epoch: number | null;
+  issue_date_epoch:         number | null;
+  // Sectors
+  sectors:           string | null;
+  sector_count:      number | null;
   linked_ngos?:      NGOLink[];
 }
 
@@ -211,8 +217,8 @@ interface CategoryCount {
 
 // ─── Fetch Helper ─────────────────────────────────────────────────────────────
 
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url);
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(url, init);
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Request failed' }));
     throw new Error(err.error || `HTTP ${res.status}`);
@@ -289,6 +295,47 @@ export const api = {
 
   getOKOIPRegions: () =>
     fetchJson<{ regions: { region_name: string; count: number }[] }>(`${API_BASE}/okoip/regions`),
+
+  // ── Data Health ───────────────────────────────────────────────────────────
+  getDataHealth: () => fetchJson<DataHealth>(`${API_BASE}/data-health`),
+
+  applyEnrichment: () =>
+    fetchJson<EnrichResult>(`${API_BASE}/enrich/apply`, { method: 'POST' }),
 };
 
-export type { Stats, Journalist, Outlet, TopOutlet, NGO, OKOIPRecord, OKOIPMatch, SocialProfile, NGOLink, PlatformEntry, NGOPlatforms, WebsiteAudit };
+interface DataHealth {
+  ngos: {
+    total: number;
+    with_email: number;
+    with_phone: number;
+    with_address: number;
+    with_website: number;
+    with_city: number;
+  };
+  matches: {
+    total: number;
+    high_confidence: number;
+    medium_confidence: number;
+    low_confidence: number;
+  };
+  enrich_opportunities: {
+    email: number;
+    phone: number;
+    address: number;
+    city: number;
+    total: number;
+  };
+  unmatched_ngos: number;
+}
+
+interface EnrichResult {
+  enriched_fields: string[];
+  after: {
+    with_email: number;
+    with_phone: number;
+    with_address: number;
+    with_city: number;
+  };
+}
+
+export type { Stats, Journalist, Outlet, TopOutlet, NGO, OKOIPRecord, OKOIPMatch, SocialProfile, NGOLink, PlatformEntry, NGOPlatforms, WebsiteAudit, DataHealth, EnrichResult };

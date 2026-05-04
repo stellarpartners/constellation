@@ -94,7 +94,7 @@ export async function onRequest(context: { request: Request; env: Env }) {
       if (cat) conditions.push(`category = '${cat.replace(/'/g, "''")}'`);
       if (region) conditions.push(`region ILIKE '%${region.replace(/'/g, "''")}%'`);
       const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-      const dataSql = `SELECT id, okoip_id, title, tin, category, organization_type, form_status, email, phone, region, prefecture, municipality, street, postcode, purpose, scraped_at FROM okoip_registry ${where} ORDER BY title ASC LIMIT ${perPage} OFFSET ${offset}`;
+      const dataSql = `SELECT id, okoip_id, title, tin, category, organization_type, form_status, email, phone, region, prefecture, municipality, street, postcode, purpose, incorporation_date_epoch, sectors, sector_count, scraped_at FROM okoip_registry ${where} ORDER BY title ASC LIMIT ${perPage} OFFSET ${offset}`;
       const countSql = `SELECT COUNT(*) as c FROM okoip_registry ${where}`;
 
       // Use sql.query() for dynamic SQL
@@ -225,6 +225,126 @@ export async function onRequest(context: { request: Request; env: Env }) {
         ORDER BY outlet_count DESC, j.name ASC
       `;
       return json({ journalists: rows.map((r: any) => ({ ...r, id: Number(r.id) })) });
+    }
+
+    // ── Data Health ──────────────────────────────────────────────────────
+    if (path === '/api/data-health') {
+      // NGO field completeness (NULLIF handles empty strings from import)
+      const ngoEmail = await sql`SELECT COUNT(*) as total, COUNT(NULLIF(email, '')) as filled FROM ngos`;
+      const ngoPhone = await sql`SELECT COUNT(*) as total, COUNT(NULLIF(phone, '')) as filled FROM ngos`;
+      const ngoAddress = await sql`SELECT COUNT(*) as total, COUNT(NULLIF(address, '')) as filled FROM ngos`;
+      const ngoWebsite = await sql`SELECT COUNT(*) as total, COUNT(NULLIF(website, '')) as filled FROM ngos`;
+      const ngoCity = await sql`SELECT COUNT(*) as total, COUNT(NULLIF(city, '')) as filled FROM ngos`;
+
+      // Match stats
+      const [matchStats] = await sql`
+        SELECT COUNT(*) as total_matches,
+               COUNT(CASE WHEN match_score >= 0.7 THEN 1 END) as high_confidence,
+               COUNT(CASE WHEN match_score >= 0.4 AND match_score < 0.7 THEN 1 END) as medium_confidence,
+               COUNT(CASE WHEN match_score < 0.4 THEN 1 END) as low_confidence
+        FROM ngo_okoip_matches`;
+
+      // Enrichment opportunities: for matched NGOs, what OKOIP fields could fill NGO gaps
+      const [opps] = await sql`
+        SELECT
+          COUNT(*) FILTER (WHERE (n.email IS NULL OR n.email = '') AND r.email IS NOT NULL AND r.email != '') as email_gaps,
+          COUNT(*) FILTER (WHERE (n.phone IS NULL OR n.phone = '') AND r.phone IS NOT NULL AND r.phone != '') as phone_gaps,
+          COUNT(*) FILTER (WHERE (n.address IS NULL OR n.address = '') AND (r.street IS NOT NULL OR r.street_number IS NOT NULL)) as address_gaps,
+          COUNT(*) FILTER (WHERE (n.city IS NULL OR n.city = '') AND (r.municipality IS NOT NULL OR r.prefecture IS NOT NULL)) as city_gaps
+        FROM ngo_okoip_matches m
+        JOIN ngos n ON n.id = m.ngo_id
+        JOIN okoip_registry r ON r.id = m.okoip_id
+        WHERE m.match_score >= 0.7`;
+
+      return json({
+        ngos: {
+          total: Number(ngoEmail[0].total),
+          with_email: Number(ngoEmail[0].filled),
+          with_phone: Number(ngoPhone[0].filled),
+          with_address: Number(ngoAddress[0].filled),
+          with_website: Number(ngoWebsite[0].filled),
+          with_city: Number(ngoCity[0].filled),
+        },
+        matches: {
+          total: Number(matchStats.total_matches),
+          high_confidence: Number(matchStats.high_confidence),
+          medium_confidence: Number(matchStats.medium_confidence),
+          low_confidence: Number(matchStats.low_confidence),
+        },
+        enrich_opportunities: {
+          email: Number(opps.email_gaps),
+          phone: Number(opps.phone_gaps),
+          address: Number(opps.address_gaps),
+          city: Number(opps.city_gaps),
+          total: Number(opps.email_gaps) + Number(opps.phone_gaps) + Number(opps.address_gaps) + Number(opps.city_gaps),
+        },
+        unmatched_ngos: 801 - Number(matchStats.total_matches),
+      });
+    }
+
+    // ── Enrich: apply OKOIP data to matched NGOs ────────────────────────
+    if (path === '/api/enrich/apply' && request.method === 'POST') {
+      const enrichments: string[] = [];
+
+      // Email — fill from OKOIP where NGO email is missing
+      const [emailRes] = await sql`
+        UPDATE ngos n SET email = r.email
+        FROM ngo_okoip_matches m JOIN okoip_registry r ON r.id = m.okoip_id
+        WHERE m.ngo_id = n.id AND m.match_score >= 0.7
+          AND (n.email IS NULL OR n.email = '')
+          AND r.email IS NOT NULL AND r.email != ''
+        RETURNING n.id`;
+      if (emailRes) enrichments.push('email');
+
+      // Phone
+      const [phoneRes] = await sql`
+        UPDATE ngos n SET phone = r.phone
+        FROM ngo_okoip_matches m JOIN okoip_registry r ON r.id = m.okoip_id
+        WHERE m.ngo_id = n.id AND m.match_score >= 0.7
+          AND (n.phone IS NULL OR n.phone = '')
+          AND r.phone IS NOT NULL AND r.phone != ''
+        RETURNING n.id`;
+      if (phoneRes) enrichments.push('phone');
+
+      // Address — combine street + number + postcode from OKOIP
+      const [addrRes] = await sql`
+        UPDATE ngos n SET address = TRIM(CONCAT(
+          COALESCE(r.street, ''), ' ',
+          COALESCE(r.street_number, ''), ', ',
+          COALESCE(r.postcode, '')
+        ))
+        FROM ngo_okoip_matches m JOIN okoip_registry r ON r.id = m.okoip_id
+        WHERE m.ngo_id = n.id AND m.match_score >= 0.7
+          AND (n.address IS NULL OR n.address = '')
+          AND (r.street IS NOT NULL OR r.street_number IS NOT NULL)
+        RETURNING n.id`;
+      if (addrRes) enrichments.push('address');
+
+      // City — use municipality or prefecture from OKOIP
+      const [cityRes] = await sql`
+        UPDATE ngos n SET city = COALESCE(r.municipality, r.prefecture)
+        FROM ngo_okoip_matches m JOIN okoip_registry r ON r.id = m.okoip_id
+        WHERE m.ngo_id = n.id AND m.match_score >= 0.7
+          AND (n.city IS NULL OR n.city = '')
+          AND (r.municipality IS NOT NULL OR r.prefecture IS NOT NULL)
+        RETURNING n.id`;
+      if (cityRes) enrichments.push('city');
+
+      // Counts after enrichment
+      const [emailC] = await sql`SELECT COUNT(*) as c FROM ngos WHERE email IS NOT NULL AND email != ''`;
+      const [phoneC] = await sql`SELECT COUNT(*) as c FROM ngos WHERE phone IS NOT NULL AND phone != ''`;
+      const [addrC] = await sql`SELECT COUNT(*) as c FROM ngos WHERE address IS NOT NULL AND address != ''`;
+      const [cityC] = await sql`SELECT COUNT(*) as c FROM ngos WHERE city IS NOT NULL AND city != ''`;
+
+      return json({
+        enriched_fields: enrichments,
+        after: {
+          with_email: Number(emailC.c),
+          with_phone: Number(phoneC.c),
+          with_address: Number(addrC.c),
+          with_city: Number(cityC.c),
+        },
+      });
     }
 
     return json({ error: 'not found' }, 404);

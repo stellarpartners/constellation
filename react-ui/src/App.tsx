@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { DataHealthView } from '@/components/DataHealthView';
 import { api } from './api';
-import type { Stats, NGO, OKOIPRecord, PlatformEntry } from './api';
+import type { Stats, NGO, OKOIPRecord, PlatformEntry, DataHealth, EnrichResult } from './api';
 
 // ─── Route title helper ────────────────────────────────────────────────────────
 
@@ -16,6 +17,7 @@ function titleFromPath(pathname: string): string {
   if (pathname === '/journalists') return 'Journalists';
   if (pathname.startsWith('/outlets/')) return 'Media Outlet';
   if (pathname === '/outlets') return 'Media Outlets';
+  if (pathname === '/data-health') return 'Data Health';
   return 'Constellation';
 }
 
@@ -39,6 +41,7 @@ function App() {
         <Route path="/journalists/:id" element={<JournalistDetailView />} />
         <Route path="/outlets" element={<OutletsView />} />
         <Route path="/outlets/:id" element={<OutletDetailView />} />
+        <Route path="/data-health" element={<DataHealthView />} />
       </Routes>
     </DashboardLayout>
   );
@@ -532,6 +535,7 @@ function OKOIPListView() {
                   <TableHead>Category</TableHead>
                   <TableHead className="hidden md:table-cell">Region</TableHead>
                   <TableHead className="hidden lg:table-cell">TIN</TableHead>
+                  <TableHead className="hidden xl:table-cell">Established</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -543,6 +547,11 @@ function OKOIPListView() {
                       {r.region ? (r.region || '').replace(/\(.*\)/, '').trim() : '—'}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-muted-foreground text-xs font-mono">{r.tin || '—'}</TableCell>
+                    <TableCell className="hidden xl:table-cell text-muted-foreground text-xs">
+                      {r.incorporation_date_epoch
+                        ? new Date(Number(r.incorporation_date_epoch)).toLocaleDateString('el-GR', { year: 'numeric', month: 'short' })
+                        : '—'}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -588,7 +597,14 @@ function OKOIPDetailView() {
         <div className="flex flex-wrap gap-2 mt-2">
           {record.category && <Badge>{record.category}</Badge>}
           {record.form_status === 1 && <Badge variant="secondary" className="bg-green-100 text-green-800">Active</Badge>}
+          {record.form_status === 2 && <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Inactive</Badge>}
+          {record.form_status === 3 && <Badge variant="secondary" className="bg-red-100 text-red-800">Deleted</Badge>}
           {record.tin && <Badge variant="outline" className="font-mono text-xs">TIN: {record.tin}</Badge>}
+          {record.incorporation_date_epoch && (
+            <Badge variant="outline" className="text-xs">
+              Est. {new Date(Number(record.incorporation_date_epoch)).toLocaleDateString('el-GR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </Badge>
+          )}
         </div>
       </div>
 
@@ -616,6 +632,29 @@ function OKOIPDetailView() {
               </CardContent>
             </Card>
           </div>
+
+          {(record.incorporation_date_epoch || record.sectors) && (
+            <Card>
+              <CardHeader><CardTitle className="text-scale-h6">Registry Details</CardTitle></CardHeader>
+              <CardContent className="text-scale-body space-y-2 text-muted-foreground">
+                {record.incorporation_date_epoch && (
+                  <p>📅 Established: {new Date(Number(record.incorporation_date_epoch)).toLocaleDateString('el-GR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                )}
+                {record.sectors ? (
+                  <div>
+                    <p className="font-medium text-foreground mb-1">Τομείς Δράσης:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {record.sectors.split(',').map((s, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">{s.trim()}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : record.sector_count != null ? (
+                  <p>📋 Sectors data available ({record.sector_count}), pending scrape</p>
+                ) : null}
+              </CardContent>
+            </Card>
+          )}
 
           {(record.legal_name || record.legal_surname) && (
             <Card>
