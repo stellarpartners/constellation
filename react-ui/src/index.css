@@ -5,100 +5,94 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   ATLAS DESIGN SYSTEM — Constellation Overhaul
+   MP132 Palette mapped to shadcn HSL-channel convention.
+   
+   NOTE: Shadcn expects bare HSL channels (no hsl() wrapper).
+   Tailwind wraps them: bg-background → hsl(var(--background)).
+   
+   Palette:
+     Floral White   #f7f4ea  →  46   45%  94%
+     Coffee Bean    #0b0119  →  265  92%   5%
+     Deep Ocean     #117777  →  180  75%  27%
+     Rebecca Purple #5c3392  →  266  48%  39%
+     Royal Gold     #f2cc64  →  44   85%  67%
+     Vibrant Coral  #fa7b62  →  10   94%  68%
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: 0 0% 98%;
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --radius: 0.625rem;
+    /* ── Surface & Text ─────────────────────────────────────────── */
+    --background:          46 45% 94%;          /* floral-white */
+    --foreground:          265 92% 5%;          /* coffee-bean */
+    --card:                40 60% 98%;          /* lifted slightly from bg */
+    --card-foreground:     265 92% 5%;
+    --popover:             0 0% 100%;
+    --popover-foreground:  265 92% 5%;
 
-    --sidebar-background: 240 10% 3.9%;
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.985 0 0);
+    /* ── Brand / Primary ────────────────────────────────────────── */
+    --primary:             180 75% 27%;         /* deep-ocean */
+    --primary-foreground:  46 45% 94%;          /* floral-white */
+
+    /* ── Secondary / Muted ──────────────────────────────────────── */
+    --secondary:           45 36% 89%;          /* warm sand */
+    --secondary-foreground: 265 92% 5%;
+    --muted:               45 36% 89%;
+    --muted-foreground:    35 13% 42%;          /* warm taupe */
+
+    /* ── Accent (gold — used sparingly) ─────────────────────────── */
+    --accent:              45 87% 91%;          /* royal-gold ~15% */
+    --accent-foreground:   48 71% 22%;          /* deep gold-brown */
+
+    /* ── Destructive / Alert ────────────────────────────────────── */
+    --destructive:         10 94% 68%;          /* vibrant-coral */
+    --destructive-foreground: 46 45% 94%;
+
+    /* ── Borders & Inputs ───────────────────────────────────────── */
+    --border:              44 30% 85%;          /* warm, soft */
+    --input:               40 25% 92%;          /* subtle distinction from bg */
+    --ring:                180 75% 27%;         /* deep-ocean */
+
+    /* ── Shape ──────────────────────────────────────────────────── */
+    --radius: 0.5rem;
+
+    /* ── Charts (dashboard stat accents) ────────────────────────── */
+    --chart-1: 180 75% 27%;    /* deep-ocean */
+    --chart-2: 44 85% 67%;     /* royal-gold */
+    --chart-3: 266 48% 39%;    /* rebecca-purple */
+    --chart-4: 10 94% 68%;     /* vibrant-coral */
+    --chart-5: 265 92% 5%;     /* coffee-bean */
+
+    /* ── Sidebar — dark anchor (The Engineer's cockpit) ─────────── */
+    --sidebar-background:        265 92% 5%;     /* coffee-bean */
+    --sidebar-foreground:        46 45% 94%;     /* floral-white */
+    --sidebar-primary:           180 75% 27%;    /* deep-ocean */
+    --sidebar-primary-foreground: 46 45% 94%;
+    --sidebar-accent:            261 44% 14%;    /* rebecca direction, dark */
+    --sidebar-accent-foreground:  44 85% 67%;    /* royal-gold */
+    --sidebar-border:            263 33% 18%;    /* purple-tinged */
+    --sidebar-ring:              180 75% 27%;
+
+    /* ── Sidebar (shadcn compat alias) ──────────────────────────── */
+    --sidebar: 265 92% 5%;
   }
 
-  .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: 0 0% 98%;
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-  }
+  /* ── Typography ────────────────────────────────────────────────── */
   .theme {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
   }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
+
   html {
     @apply font-sans;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

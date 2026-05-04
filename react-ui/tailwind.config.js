@@ -65,6 +65,16 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontSize: {
+        'scale-h1':    ['2.986rem', { lineHeight: '1.15', fontWeight: '700', letterSpacing: '-0.02em' }],
+        'scale-h2':    ['2.488rem', { lineHeight: '1.2',  fontWeight: '700', letterSpacing: '-0.015em' }],
+        'scale-h3':    ['2.074rem', { lineHeight: '1.25', fontWeight: '600', letterSpacing: '-0.01em' }],
+        'scale-h4':    ['1.728rem', { lineHeight: '1.3',  fontWeight: '600' }],
+        'scale-h5':    ['1.44rem',  { lineHeight: '1.35', fontWeight: '600' }],
+        'scale-h6':    ['1.2rem',   { lineHeight: '1.4',  fontWeight: '600' }],
+        'scale-body':  ['1rem',     { lineHeight: '1.5' }],
+        'scale-small': ['0.833rem', { lineHeight: '1.5' }],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

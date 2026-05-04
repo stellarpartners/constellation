@@ -25,17 +25,20 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-60 flex-col border-r bg-sidebar text-sidebar-foreground">
       {/* Brand */}
-      <div className="flex h-14 items-center gap-2 border-b border-sidebar-border px-5">
-        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground text-xs font-bold">
-          C
+      <div className="flex h-14 items-center gap-3 border-b border-sidebar-border px-5">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-sm font-bold tracking-tight">
+          ✦
         </div>
-        <span className="font-semibold text-sm">Constellation</span>
+        <div className="flex flex-col leading-none">
+          <span className="font-semibold text-scale-h6 tracking-tight">Constellation</span>
+          <span className="text-scale-small text-sidebar-foreground/40 font-normal">Stellar Partners</span>
+        </div>
       </div>
 
       {/* Search */}
       <div className="px-3 pt-3 pb-2">
         <Link to="/search">
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent text-xs h-8">
+          <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent text-scale-small h-8">
             <Search className="h-3.5 w-3.5" />
             Quick search...
           </Button>
@@ -54,7 +57,7 @@ export function Sidebar() {
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "w-full justify-start gap-3 text-xs font-normal h-8 px-3",
+                    "w-full justify-start gap-3 text-scale-small font-normal h-8 px-3",
                     isActive
                       ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                       : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
@@ -71,7 +74,7 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="border-t border-sidebar-border p-3">
-        <p className="text-[10px] text-sidebar-foreground/40 text-center">
+        <p className="text-scale-small text-sidebar-foreground/40 text-center">
           Stellar Partners &middot; Constellation
         </p>
       </div>
