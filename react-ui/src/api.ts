@@ -98,10 +98,39 @@ interface NGO {
   wordpress_url?: string | null;
   hubspot_id?:  string | null;
   // Detail-only
-  social?:           SocialProfile[];
-  okoip_matches?:    OKOIPMatch[];
-  platforms?:        Record<string, any[]>;
-  linked_ngos?:      NGOLink[];
+  social?:              SocialProfile[];
+  okoip_matches?:       OKOIPMatch[];
+  platforms?:           NGOPlatforms;
+  website_audits?:      WebsiteAudit[];
+  linked_ngos?:         NGOLink[];
+  // Extra fields from detail endpoint
+  last_modified_raw?:   string | null;
+  last_modified?:       string | null;
+}
+
+interface PlatformEntry {
+  profile_url?:  string | null;
+  acf_slug?:     string | null;
+  source_name?:  string | null;
+}
+
+interface NGOPlatforms {
+  youbehero?:       PlatformEntry[];
+  social_dynamo?:    PlatformEntry[];
+  acf?:             PlatformEntry[];
+  ngheroes?:        PlatformEntry[];
+  ethelon?:         PlatformEntry[];
+  desmos?:          PlatformEntry[];
+}
+
+interface WebsiteAudit {
+  scan_date:     string | null;
+  error_rate:    string | null;
+  status_note:   string | null;
+  audited_url:   string | null;
+  http_2xx?:     string | null;
+  http_3xx?:     string | null;
+  http_4xx?:     string | null;
 }
 
 interface SocialProfile {
@@ -166,6 +195,7 @@ interface OKOIPRecord {
 interface NGOLink {
   ngo_id:       number;
   company_name: string;
+  slug?:        string | null;
   email:        string | null;
   website:      string | null;
   ngo_category: string | null;
@@ -236,7 +266,7 @@ export const api = {
     );
   },
 
-  getNGO: (id: number) => fetchJson<NGO>(`${API_BASE}/ngos/${id}`),
+  getNGO: (id: number | string) => fetchJson<NGO>(`${API_BASE}/ngos/${id}`),
 
   // ── OKOIP ─────────────────────────────────────────────────────────────────
 
@@ -261,4 +291,4 @@ export const api = {
     fetchJson<{ regions: { region_name: string; count: number }[] }>(`${API_BASE}/okoip/regions`),
 };
 
-export type { Stats, Journalist, Outlet, TopOutlet, NGO, OKOIPRecord, OKOIPMatch, SocialProfile, NGOLink };
+export type { Stats, Journalist, Outlet, TopOutlet, NGO, OKOIPRecord, OKOIPMatch, SocialProfile, NGOLink, PlatformEntry, NGOPlatforms, WebsiteAudit };
