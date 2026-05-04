@@ -335,13 +335,22 @@ function NGODetailView() {
             )}
             {ngo.social && ngo.social.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {ngo.social.map((s, i) => (
-                  s.profile_url ? (
+                {ngo.social.map((s, i) => {
+                  const colors: Record<string, string> = {
+                    facebook: 'bg-[#1877F2]', instagram: 'bg-[#E4405F]',
+                    linkedin: 'bg-[#0A66C2]', twitter: 'bg-black',
+                    youtube: 'bg-[#FF0000]', tiktok: 'bg-black',
+                  };
+                  const dot = colors[s.platform?.toLowerCase()] || 'bg-muted-foreground';
+                  return s.profile_url ? (
                     <a key={i} href={s.profile_url} target="_blank" rel="noopener noreferrer">
-                      <Badge variant="secondary" className="capitalize hover:bg-secondary/80 text-xs">{s.platform}</Badge>
+                      <Badge variant="secondary" className="capitalize hover:bg-secondary/80 text-xs gap-1.5">
+                        <span className={`w-2 h-2 rounded-full ${dot}`} />
+                        {s.platform}
+                      </Badge>
                     </a>
-                  ) : null
-                ))}
+                  ) : null;
+                })}
               </div>
             )}
             {ngo.last_modified_raw && <div className="text-xs">Last modified: {ngo.last_modified_raw}</div>}
