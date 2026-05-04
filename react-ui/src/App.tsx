@@ -341,12 +341,17 @@ function NGODetailView() {
                     linkedin: 'bg-[#0A66C2]', twitter: 'bg-black',
                     youtube: 'bg-[#FF0000]', tiktok: 'bg-black',
                   };
-                  const dot = colors[s.platform?.toLowerCase()] || 'bg-muted-foreground';
+                  const label: Record<string, string> = {
+                    linkedin: 'LinkedIn', youtube: 'YouTube',
+                  };
+                  const key = s.platform?.toLowerCase() || '';
+                  const dot = colors[key] || 'bg-muted-foreground';
+                  const name = label[key] || s.platform;
                   return s.profile_url ? (
                     <a key={i} href={s.profile_url} target="_blank" rel="noopener noreferrer">
                       <Badge variant="secondary" className="capitalize hover:bg-secondary/80 text-xs gap-1.5">
                         <span className={`w-2 h-2 rounded-full ${dot}`} />
-                        {s.platform}
+                        {name}
                       </Badge>
                     </a>
                   ) : null;
