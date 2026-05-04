@@ -369,7 +369,6 @@ function NGODetailView() {
                     <TableHead>Match</TableHead>
                     <TableHead className="hidden md:table-cell">TIN</TableHead>
                     <TableHead className="hidden lg:table-cell">Region</TableHead>
-                    <TableHead className="hidden lg:table-cell">Grant</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -383,9 +382,6 @@ function NGODetailView() {
                       </TableCell>
                       <TableCell className="hidden md:table-cell text-xs font-mono text-muted-foreground">{m.tin || '—'}</TableCell>
                       <TableCell className="hidden lg:table-cell text-scale-small text-muted-foreground">{m.region || m.prefecture || '—'}</TableCell>
-                      <TableCell className="hidden lg:table-cell text-scale-small text-muted-foreground">
-                        {m.grant_value != null ? `€${Number(m.grant_value).toLocaleString()}` : '—'}
-                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -703,14 +699,6 @@ function OKOIPDetailView() {
         <Card>
           <CardHeader><CardTitle className="text-scale-h6">Purpose</CardTitle></CardHeader>
           <CardContent className="text-scale-body text-muted-foreground whitespace-pre-line">{record.purpose}</CardContent>
-        </Card>
-      )}
-
-      {/* ── Grant ────────────────────────────────────────────────── */}
-      {record.grant_value != null && (
-        <Card>
-          <CardHeader><CardTitle className="text-scale-h6">Grant</CardTitle></CardHeader>
-          <CardContent className="text-scale-body text-muted-foreground">€{Number(record.grant_value).toLocaleString()}</CardContent>
         </Card>
       )}
     </div>
