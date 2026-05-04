@@ -1,0 +1,34 @@
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
+import { neon } from '@neondatabase/serverless';
+
+const app = new Hono<{ Bindings: { NEON_CONNECTION_STRING: string } }>();
+
+app.use('*', logger());
+app.use('*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'OPTIONS'] }));
+
+app.get('/api/scan-unmatched', async (c) => {
+  const conn = c.env.NEON_CONNECTION_STRING;
+  if (!conn) return c.json({ error: 'No DB config' }, 500);
+  try {
+    const sql = neon(conn);
+    const [eth] = await sql`SELECT COUNT(*) as c FROM ngo_ethelon WHERE source_name IS NULL OR trim(source_name) = ''`;
+    const [des] = await sql`SELECT COUNT(*) as c FROM ngo_desmos WHERE source_name IS NULL OR trim(source_name) = ''`;
+    const [ngh] = await sql`SELECT COUNT(*) as c FROM ngo_ngheroes WHERE source_name IS NULL OR trim(source_name) = ''`;
+    const [sd] = await sql`SELECT COUNT(*) as c FROM ngo_social_dynamo WHERE source_name IS NULL OR trim(source_name) = ''`;
+    return c.json({
+      unmatched: {
+        ethelon: Number(eth.c),
+        desmos: Number(des.c),
+        ngoheroes: Number(ngh.c),
+        social_dynamo: Number(sd.c),
+      }
+    });
+  } catch (e) {
+    return c.json({ error: String(e) }, 500);
+  }
+});
+
+app.all('*', c => c.json({ error: 'not found' }, 404));
+export default { fetch: app.fetch };
