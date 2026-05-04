@@ -608,79 +608,12 @@ function OKOIPDetailView() {
         </div>
       </div>
 
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="ngos">Linked NGOs ({record.linked_ngos?.length || 0})</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-4 pt-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader><CardTitle className="text-scale-h6">Contact</CardTitle></CardHeader>
-              <CardContent className="text-scale-body space-y-1 text-muted-foreground">
-                {record.email && <p>✉ {record.email}</p>}
-                {record.phone && <p>📞 {record.phone}</p>}
-                <p>📍 {[record.street, record.street_number].filter(Boolean).join(' ') || '—'}{record.postcode ? `, ${record.postcode}` : ''}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-scale-h6">Geography</CardTitle></CardHeader>
-              <CardContent className="text-scale-body space-y-1 text-muted-foreground">
-                <p>🏛 {(record.region || '').replace(/\(.*\)/, '').trim() || '—'}</p>
-                <p>📍 {record.prefecture || ''}{record.municipality ? ` / ${record.municipality}` : ''}</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {(record.incorporation_date_epoch || record.sectors) && (
-            <Card>
-              <CardHeader><CardTitle className="text-scale-h6">Registry Details</CardTitle></CardHeader>
-              <CardContent className="text-scale-body space-y-2 text-muted-foreground">
-                {record.incorporation_date_epoch && (
-                  <p>📅 Established: {new Date(Number(record.incorporation_date_epoch)).toLocaleDateString('el-GR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                )}
-                {record.sectors ? (
-                  <div>
-                    <p className="font-medium text-foreground mb-1">Τομείς Δράσης:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {record.sectors.split(',').map((s, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{s.trim()}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                ) : record.sector_count != null ? (
-                  <p>📋 Sectors data available ({record.sector_count}), pending scrape</p>
-                ) : null}
-              </CardContent>
-            </Card>
-          )}
-
-          {(record.legal_name || record.legal_surname) && (
-            <Card>
-              <CardHeader><CardTitle className="text-scale-h6">Legal Representative</CardTitle></CardHeader>
-              <CardContent className="text-scale-body text-muted-foreground">
-                <p>{[record.legal_name, record.legal_surname].filter(Boolean).join(' ')}{record.legal_tin ? ` (TIN: ${record.legal_tin})` : ''}</p>
-              </CardContent>
-            </Card>
-          )}
-
-          {record.purpose && (
-            <Card>
-              <CardHeader><CardTitle className="text-scale-h6">Purpose</CardTitle></CardHeader>
-              <CardContent className="text-scale-body text-muted-foreground whitespace-pre-line">{record.purpose}</CardContent>
-            </Card>
-          )}
-
-          {record.grant_value != null && (
-            <Card>
-              <CardHeader><CardTitle className="text-scale-h6">Grant</CardTitle></CardHeader>
-              <CardContent className="text-scale-body text-muted-foreground">€{Number(record.grant_value).toLocaleString()}</CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
-        <TabsContent value="ngos" className="pt-4">
+      {/* ── Linked NGOs (top, before everything) ─────────────────── */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-scale-h6">Linked NGOs {record.linked_ngos?.length ? `(${record.linked_ngos.length})` : ''}</CardTitle>
+        </CardHeader>
+        <CardContent>
           {record.linked_ngos && record.linked_ngos.length > 0 ? (
             <div className="rounded-md border">
               <Table>
@@ -707,10 +640,79 @@ function OKOIPDetailView() {
               </Table>
             </div>
           ) : (
-            <p className="text-scale-body text-muted-foreground">Not linked to any curated NGOs.</p>
+            <p className="text-scale-small text-muted-foreground">Not linked to any curated NGOs. Run matching to connect this record.</p>
           )}
-        </TabsContent>
-      </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* ── Contact + Geography ──────────────────────────────────── */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader><CardTitle className="text-scale-h6">Contact</CardTitle></CardHeader>
+          <CardContent className="text-scale-body space-y-1 text-muted-foreground">
+            {record.email && <p>✉ {record.email}</p>}
+            {record.phone && <p>📞 {record.phone}</p>}
+            <p>📍 {[record.street, record.street_number].filter(Boolean).join(' ') || '—'}{record.postcode ? `, ${record.postcode}` : ''}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle className="text-scale-h6">Geography</CardTitle></CardHeader>
+          <CardContent className="text-scale-body space-y-1 text-muted-foreground">
+            <p>🏛 {(record.region || '').replace(/\(.*\)/, '').trim() || '—'}</p>
+            <p>📍 {record.prefecture || ''}{record.municipality ? ` / ${record.municipality}` : ''}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── Registry Details ─────────────────────────────────────── */}
+      {(record.incorporation_date_epoch || record.sectors) && (
+        <Card>
+          <CardHeader><CardTitle className="text-scale-h6">Registry Details</CardTitle></CardHeader>
+          <CardContent className="text-scale-body space-y-2 text-muted-foreground">
+            {record.incorporation_date_epoch && (
+              <p>📅 Established: {new Date(Number(record.incorporation_date_epoch)).toLocaleDateString('el-GR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            )}
+            {record.sectors ? (
+              <div>
+                <p className="font-medium text-foreground mb-1">Τομείς Δράσης:</p>
+                <div className="flex flex-wrap gap-1">
+                  {record.sectors.split(',').map((s, i) => (
+                    <Badge key={i} variant="secondary" className="text-xs">{s.trim()}</Badge>
+                  ))}
+                </div>
+              </div>
+            ) : record.sector_count != null ? (
+              <p>📋 Sectors data available ({record.sector_count}), pending scrape</p>
+            ) : null}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* ── Legal Representative ─────────────────────────────────── */}
+      {(record.legal_name || record.legal_surname) && (
+        <Card>
+          <CardHeader><CardTitle className="text-scale-h6">Legal Representative</CardTitle></CardHeader>
+          <CardContent className="text-scale-body text-muted-foreground">
+            <p>{[record.legal_name, record.legal_surname].filter(Boolean).join(' ')}{record.legal_tin ? ` (TIN: ${record.legal_tin})` : ''}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* ── Purpose ──────────────────────────────────────────────── */}
+      {record.purpose && (
+        <Card>
+          <CardHeader><CardTitle className="text-scale-h6">Purpose</CardTitle></CardHeader>
+          <CardContent className="text-scale-body text-muted-foreground whitespace-pre-line">{record.purpose}</CardContent>
+        </Card>
+      )}
+
+      {/* ── Grant ────────────────────────────────────────────────── */}
+      {record.grant_value != null && (
+        <Card>
+          <CardHeader><CardTitle className="text-scale-h6">Grant</CardTitle></CardHeader>
+          <CardContent className="text-scale-body text-muted-foreground">€{Number(record.grant_value).toLocaleString()}</CardContent>
+        </Card>
+      )}
     </div>
   );
 }
