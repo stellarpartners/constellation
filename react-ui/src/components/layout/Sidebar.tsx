@@ -9,6 +9,7 @@ import {
   Users,
   Newspaper,
   Search,
+  Heart,
 } from 'lucide-react';
 
 const navItems = [
@@ -17,6 +18,7 @@ const navItems = [
   { label: 'OKOIP Registry', href: '/okoip', icon: Database },
   { label: 'Journalists', href: '/journalists', icon: Users },
   { label: 'Media Outlets', href: '/outlets', icon: Newspaper },
+  { label: 'Data Health', href: '/data-health', icon: Heart },
 ];
 
 export function Sidebar() {
