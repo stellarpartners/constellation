@@ -318,7 +318,7 @@ function NGODetailView() {
 
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-scale-h6">Online Presence</CardTitle></CardHeader>
-          <CardContent className="text-scale-body space-y-1.5 text-muted-foreground">
+          <CardContent className="text-scale-body space-y-2 text-muted-foreground">
             {ngo.website ? (
               <a href={ngo.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-primary hover:underline">
                 <Globe className="h-3.5 w-3.5 shrink-0" />
@@ -333,26 +333,22 @@ function NGODetailView() {
                 ) : ''}
               </div>
             )}
+            {ngo.social && ngo.social.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {ngo.social.map((s, i) => (
+                  s.profile_url ? (
+                    <a key={i} href={s.profile_url} target="_blank" rel="noopener noreferrer">
+                      <Badge variant="secondary" className="capitalize hover:bg-secondary/80 text-xs">{s.platform}</Badge>
+                    </a>
+                  ) : null
+                ))}
+              </div>
+            )}
             {ngo.last_modified_raw && <div className="text-xs">Last modified: {ngo.last_modified_raw}</div>}
+            {!ngo.website && !ngo.social?.length && <p className="text-xs">No online presence recorded</p>}
           </CardContent>
         </Card>
       </div>
-
-      {/* ── Social Profiles ─────────────────────────────────────── */}
-      {ngo.social && ngo.social.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-scale-h6">Social Profiles</CardTitle></CardHeader>
-          <CardContent className="flex flex-wrap gap-1.5">
-            {ngo.social.map((s, i) => (
-              s.profile_url ? (
-                <a key={i} href={s.profile_url} target="_blank" rel="noopener noreferrer">
-                  <Badge variant="secondary" className="capitalize hover:bg-secondary/80 text-xs">{s.platform}</Badge>
-                </a>
-              ) : null
-            ))}
-          </CardContent>
-        </Card>
-      )}
 
       {/* ── OKOIP Registry ──────────────────────────────────────── */}
       <Card>
