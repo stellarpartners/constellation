@@ -80,6 +80,8 @@ npx wrangler pages deploy dist \
   --commit-hash "$(git rev-parse HEAD)"
 ```
 
+> **Important:** Deploy from within `react-ui/`, not the project root. Wrangler looks for the `functions/` directory relative to the CWD. Deploying from root with `react-ui/dist` as the target causes the Pages Function to be silently skipped.
+
 ---
 
 ## Local Development
@@ -209,15 +211,19 @@ scripts/
 
 ## Deployment Title Convention
 
-Always pass git metadata to Cloudflare Pages deploys:
+Always pass git metadata to Cloudflare Pages deploys — **and deploy from within `react-ui/`**:
 
 ```bash
+cd react-ui
+npm run build
 npx wrangler pages deploy dist \
   --project-name=constellation \
   --branch=master \
   --commit-message "$(git log -1 --format=%s)" \
   --commit-hash "$(git rev-parse HEAD)"
 ```
+
+> **Never** run `npx wrangler pages deploy react-ui/dist` from the project root — wrangler will silently skip the Pages Function.
 
 This gives each deployment a unique, descriptive title in the Cloudflare dashboard instead of a generic label.
 
