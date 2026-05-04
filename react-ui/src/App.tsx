@@ -1,462 +1,232 @@
 import { useState, useEffect, useCallback } from 'react';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { api } from './api';
-import type { Stats, Journalist, Outlet, TopOutlet, NGO, OKOIPRecord } from './api';
+import type { Stats, NGO, OKOIPRecord } from './api';
 
 // ─── Views ───────────────────────────────────────────────────────────────────
 
-type View = 'top-outlets' | 'cross-platform' | 'search-journalists' | 'search-outlets' | 'journalist-detail' | 'outlet-detail' | 'ngo-list' | 'okoip-list' | 'ngo-detail' | 'okoip-detail';
-type Entity = { kind: 'journalist' | 'outlet' | 'ngo' | 'okoip'; id: number | string } | null;
+type View = 'dashboard' | 'ngo-list' | 'ngo-detail' | 'okoip-list' | 'okoip-detail' | 'journalists' | 'journalist-detail' | 'outlets' | 'outlet-detail';
 
 function App() {
-  const [view, setView] = useState<View>('top-outlets');
-  const [entity, setEntity] = useState<Entity>(null);
+  const [view, setView] = useState<View>('dashboard');
+  const [entityId, setEntityId] = useState<number | string | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    api.getStats()
-      .then(setStats)
-      .catch(() => setError('Failed to connect to API'));
+    api.getStats().then(setStats).catch(() => {});
   }, []);
 
-  const navigate = useCallback((v: View, e?: Entity) => {
+  const navigate = useCallback((v: View, id?: number | string) => {
     setView(v);
-    setEntity(e ?? null);
+    setEntityId(id ?? null);
   }, []);
 
-  const isDetail = ['journalist-detail', 'outlet-detail', 'ngo-detail', 'okoip-detail'].includes(view);
+  const title = view === 'dashboard' ? 'Dashboard' :
+    view === 'ngo-list' ? 'NGOs' :
+    view === 'okoip-list' ? 'OKOIP Registry' :
+    view === 'journalists' ? 'Journalists' :
+    view === 'outlets' ? 'Media Outlets' :
+    view === 'journalist-detail' ? 'Journalist' :
+    view === 'outlet-detail' ? 'Media Outlet' : 'Constellation';
 
   return (
-    <div className="app-container">
-      {error && <div className="error-msg">{error}</div>}
-
-      <header className="header">
-        <h1>Constellation Studio</h1>
-        <p className="subtitle">Media, Journalist & NGO Intelligence</p>
-      </header>
-
-      {stats && (
-        <div className="stats-grid">
-          <StatCard label="Journalists" value={stats.total_journalists} />
-          <StatCard label="Media Outlets" value={stats.total_outlets} />
-          <StatCard label="Relationships" value={stats.total_relationships} />
-          <StatCard label="NGOs" value={stats.total_ngos} sub="curated" />
-          <StatCard label="OKOIP Registry" value={stats.total_okoip} sub={stats.total_ngo_matches + ' linked'} />
-        </div>
-      )}
-
-      {!isDetail && (
-        <nav className="nav-tabs">
-          <div className="tab-buttons">
-            <button className={view === 'top-outlets' ? 'active' : ''} onClick={() => navigate('top-outlets')}>Top Outlets</button>
-            <button className={view === 'cross-platform' ? 'active' : ''} onClick={() => navigate('cross-platform')}>Cross-Platform</button>
-            <button className={`secondary ${view === 'search-journalists' ? 'active' : ''}`} onClick={() => navigate('search-journalists')}>Journalists</button>
-            <button className={`secondary ${view === 'search-outlets' ? 'active' : ''}`} onClick={() => navigate('search-outlets')}>Outlets</button>
-            <button className={`secondary ${view === 'ngo-list' ? 'active' : ''}`} onClick={() => navigate('ngo-list')}>NGOs</button>
-            <button className={`secondary ${view === 'okoip-list' ? 'active' : ''}`} onClick={() => navigate('okoip-list')}>OKOIP Registry</button>
-          </div>
-
-          {view === 'top-outlets' && <TopOutletsView onSelect={(id) => navigate('outlet-detail', { kind: 'outlet', id })} />}
-          {view === 'cross-platform' && <CrossPlatformView onSelect={(id) => navigate('journalist-detail', { kind: 'journalist', id })} />}
-          {view === 'search-journalists' && <SearchJournalistsView onSelect={(id) => navigate('journalist-detail', { kind: 'journalist', id })} />}
-          {view === 'search-outlets' && <SearchOutletsView onSelect={(id) => navigate('outlet-detail', { kind: 'outlet', id })} />}
-          {view === 'ngo-list' && <NGOListView onSelect={(id) => navigate('ngo-detail', { kind: 'ngo', id })} />}
-          {view === 'okoip-list' && <OKOIPListView onSelect={(id) => navigate('okoip-detail', { kind: 'okoip', id })} />}
-        </nav>
-      )}
-
-      {view === 'journalist-detail' && entity?.kind === 'journalist' && (
-        <JournalistDetail id={entity.id as number} onBack={() => navigate('top-outlets')} onSelectOutlet={(id) => navigate('outlet-detail', { kind: 'outlet', id })} />
-      )}
-      {view === 'outlet-detail' && entity?.kind === 'outlet' && (
-        <OutletDetail id={entity.id as number} onBack={() => navigate('top-outlets')} onSelectJournalist={(id) => navigate('journalist-detail', { kind: 'journalist', id })} />
-      )}
-      {view === 'ngo-detail' && entity?.kind === 'ngo' && (
-        <NGODetailView id={entity.id as number} onBack={() => navigate('ngo-list')} onSelectOKOIP={(id) => navigate('okoip-detail', { kind: 'okoip', id })} />
-      )}
-      {view === 'okoip-detail' && entity?.kind === 'okoip' && (
-        <OKOIPDetailView id={entity.id as number | string} onBack={() => navigate('okoip-list')} onSelectNGO={(id) => navigate('ngo-detail', { kind: 'ngo', id })} />
-      )}
-    </div>
+    <DashboardLayout title={title}>
+      {view === 'dashboard' && <DashboardView stats={stats} onNavigate={navigate} />}
+      {view === 'ngo-list' && <NGOListView onSelect={(id) => navigate('ngo-detail', id)} />}
+      {view === 'ngo-detail' && <NGODetailView id={entityId as number} onBack={() => navigate('ngo-list')} onSelectOKOIP={(id) => navigate('okoip-detail', id)} />}
+      {view === 'okoip-list' && <OKOIPListView onSelect={(id) => navigate('okoip-detail', id)} />}
+      {view === 'okoip-detail' && <OKOIPDetailView id={entityId as number | string} onBack={() => navigate('okoip-list')} onSelectNGO={(id) => navigate('ngo-detail', id)} />}
+      {view === 'journalists' && <JournalistsView onSelect={(id) => navigate('journalist-detail', id)} />}
+      {view === 'journalist-detail' && <JournalistDetailView id={entityId as number} onBack={() => navigate('journalists')} onSelectOutlet={(id) => navigate('outlet-detail', id)} />}
+      {view === 'outlets' && <OutletsView onSelect={(id) => navigate('outlet-detail', id)} />}
+      {view === 'outlet-detail' && <OutletDetailView id={entityId as number} onBack={() => navigate('outlets')} onSelectJournalist={(id) => navigate('journalist-detail', id)} />}
+    </DashboardLayout>
   );
 }
 
-// ─── Stat Card ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════════════════════════
 
-function StatCard({ label, value, sub }: { label: string; value: number; sub?: string }) {
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Users,
+  Newspaper,
+  Link2,
+  Building2,
+  Database,
+  GitCompare,
+  ArrowRight,
+} from 'lucide-react';
+
+function DashboardView({ stats, onNavigate }: { stats: Stats | null; onNavigate: (v: View, id?: number | string) => void }) {
+  if (!stats) return null;
+
+  const cards = [
+    { label: 'NGOs Curated', value: stats.total_ngos, icon: Building2, href: 'ngo-list', color: 'text-blue-600' },
+    { label: 'OKOIP Registry', value: stats.total_okoip, icon: Database, href: 'okoip-list', color: 'text-emerald-600' },
+    { label: 'Matched Pairs', value: stats.total_ngo_matches, icon: GitCompare, href: '', color: 'text-purple-600' },
+    { label: 'Journalists', value: stats.total_journalists, icon: Users, href: 'journalists', color: 'text-orange-600' },
+    { label: 'Media Outlets', value: stats.total_outlets, icon: Newspaper, href: 'outlets', color: 'text-rose-600' },
+    { label: 'Relationships', value: stats.total_relationships, icon: Link2, href: '', color: 'text-cyan-600' },
+  ];
+
   return (
-    <div className="stat-card">
-      <div className="stat-number">{value.toLocaleString()}</div>
-      <div className="stat-label">{label}</div>
-      {sub && <div className="stat-sub">{sub}</div>}
-    </div>
-  );
-}
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-lg font-semibold text-foreground">Overview</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          All data across your Constellation database
+        </p>
+      </div>
 
-// ─── Top Outlets View ────────────────────────────────────────────────────────
-
-function TopOutletsView({ onSelect }: { onSelect: (id: number) => void }) {
-  const [outlets, setOutlets] = useState<TopOutlet[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => {
-    api.getTopOutlets(20)
-      .then(({ outlets }) => setOutlets(outlets))
-      .catch(() => setErr('Failed to load outlets'))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <p className="loading">Loading outlets…</p>;
-  if (err) return <p className="error-msg">{err}</p>;
-  if (outlets.length === 0) return <p className="loading">No outlets found.</p>;
-
-  return (
-    <div className="section active">
-      <p className="section-title">Top Media Outlets by Journalist Count</p>
-      <div className="list-container">
-        {outlets.map((o) => (
-          <div key={o.id} className="list-item" onClick={() => onSelect(o.id)}>
-            <div className="item-primary">
-              <span className="item-name">{o.name}</span>
-              <span className="item-meta">{o.journalist_count} journalist{o.journalist_count !== 1 ? 's' : ''}</span>
-            </div>
-            <div className="item-tags">
-              {o.type_of_media && <span className="tag">{o.type_of_media}</span>}
-              {o.geographical_level && <span className="tag geo">{o.geographical_level}</span>}
-              {o.combined_score != null && (
-                <span className={`tag score ${o.combined_score >= 5 ? 'high' : o.combined_score >= 3 ? 'med' : 'low'}`}>
-                  EU score: {o.combined_score}
-                </span>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+        {cards.map((card) => (
+          <Card
+            key={card.label}
+            className={card.href ? 'cursor-pointer hover:border-primary/50 transition-colors' : ''}
+            onClick={() => card.href && onNavigate(card.href as View)}
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {card.label}
+              </CardTitle>
+              <card.icon className={`h-5 w-5 ${card.color}`} />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{card.value.toLocaleString()}</div>
+              {card.href && (
+                <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary">
+                  View all <ArrowRight className="h-3 w-3" />
+                </div>
               )}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
-    </div>
-  );
-}
 
-// ─── Cross-Platform View ───────────────────────────────────────────────────────
-
-function CrossPlatformView({ onSelect }: { onSelect: (id: number) => void }) {
-  const [journalists, setJournalists] = useState<Journalist[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => {
-    api.getCrossPlatformJournalists()
-      .then(({ journalists }) => setJournalists(journalists as any))
-      .catch(() => setErr('Failed to load journalists'))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <p className="loading">Loading cross-platform journalists…</p>;
-  if (err) return <p className="error-msg">{err}</p>;
-  if (journalists.length === 0) return <p className="loading">No cross-platform journalists found.</p>;
-
-  return (
-    <div className="section active">
-      <p className="section-title">Journalists Working at Multiple Outlets</p>
-      <div className="list-container">
-        {journalists.map((j) => (
-          <div key={j.id} className="list-item" onClick={() => onSelect(j.id)}>
-            <div className="item-primary">
-              <span className="item-name">{j.name}</span>
-              <span className="item-meta">{j.total_outlets ?? j.outlets?.length ?? '?'} outlets</span>
-            </div>
-            <div className="item-tags">
-              {j.primary_beat && <span className="tag">{j.primary_beat}</span>}
-              {j.twitter && <span className="tag social">Twitter</span>}
-              {j.linkedin && <span className="tag social">LinkedIn</span>}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── Search Journalists ───────────────────────────────────────────────────────
-
-function SearchJournalistsView({ onSelect }: { onSelect: (id: number) => void }) {
-  const [query, setQuery] = useState('');
-  const [journalists, setJournalists] = useState<Journalist[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const doSearch = useCallback((q: string) => {
-    if (!q.trim()) { setJournalists([]); return; }
-    setLoading(true);
-    api.search(q)
-      .then(({ journalists }) => setJournalists(journalists))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  return (
-    <div className="section active">
-      <p className="section-title">Search Journalists</p>
-      <div className="search-container">
-        <input className="search-input" placeholder="Type a journalist name…" value={query}
-          onChange={(e) => { setQuery(e.target.value); doSearch(e.target.value); }} />
-      </div>
-      <div className="list-container">
-        {loading && <p className="loading">Searching…</p>}
-        {!loading && query && journalists.map((j) => (
-          <div key={j.id} className="list-item" onClick={() => onSelect(j.id)}>
-            <div className="item-primary">
-              <span className="item-name">{j.name}</span>
-              <span className="item-meta">{j.outlet_name || j.primary_beat || '—'}</span>
-            </div>
-            <div className="item-tags">
-              {j.twitter && <span className="tag social">Twitter</span>}
-              {j.linkedin && <span className="tag social">LinkedIn</span>}
-              {j.status && <span className={`tag ${j.status.includes('Not') ? 'neg' : 'pos'}`}>{j.status}</span>}
-            </div>
-          </div>
-        ))}
-        {!loading && query && journalists.length === 0 && <p className="loading">No journalists match "{query}"</p>}
-      </div>
-    </div>
-  );
-}
-
-// ─── Search Outlets ───────────────────────────────────────────────────────────
-
-function SearchOutletsView({ onSelect }: { onSelect: (id: number) => void }) {
-  const [query, setQuery] = useState('');
-  const [outlets, setOutlets] = useState<Outlet[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const doSearch = useCallback((q: string) => {
-    if (!q.trim()) { setOutlets([]); return; }
-    setLoading(true);
-    api.search(q)
-      .then(({ outlets }) => setOutlets(outlets))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  return (
-    <div className="section active">
-      <p className="section-title">Search Media Outlets</p>
-      <div className="search-container">
-        <input className="search-input" placeholder="Type an outlet name…" value={query}
-          onChange={(e) => { setQuery(e.target.value); doSearch(e.target.value); }} />
-      </div>
-      <div className="list-container">
-        {loading && <p className="loading">Searching…</p>}
-        {!loading && query && outlets.map((o) => (
-          <div key={o.id} className="list-item" onClick={() => onSelect(o.id)}>
-            <div className="item-primary">
-              <span className="item-name">{o.name}</span>
-              <span className="item-meta">{o.type_of_media || o.geographical_level || '—'}</span>
-            </div>
-            <div className="item-tags">
-              {o.combined_score != null && <span className={`tag score ${o.combined_score >= 5 ? 'high' : o.combined_score >= 3 ? 'med' : 'low'}`}>EU: {o.combined_score}</span>}
-              {o.progressive_score != null && <span className={`tag ${o.progressive_score >= 3 ? 'pos' : 'neutral'}`}>Prog: {o.progressive_score}</span>}
-              {o.website && <span className="tag web">web</span>}
-            </div>
-          </div>
-        ))}
-        {!loading && query && outlets.length === 0 && <p className="loading">No outlets match "{query}"</p>}
-      </div>
-    </div>
-  );
-}
-
-// ─── Journalist Detail ───────────────────────────────────────────────────────
-
-function JournalistDetail({ id, onBack, onSelectOutlet }: { id: number; onBack: () => void; onSelectOutlet: (id: number) => void }) {
-  const [journalist, setJournalist] = useState<Journalist | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => { api.getJournalist(id).then(setJournalist).catch(() => setErr('Failed to load journalist')).finally(() => setLoading(false)); }, [id]);
-
-  if (loading) return <p className="loading">Loading journalist…</p>;
-  if (err || !journalist) return <p className="error-msg">{err || 'Not found'}</p>;
-
-  const articles: string[] = journalist.articles ? JSON.parse(journalist.articles) : [];
-
-  return (
-    <div className="detail-view">
-      <span className="back-btn" onClick={onBack}>&larr; Back</span>
-      <div className="detail-header">
-        <h2>{journalist.name}</h2>
-        {journalist.outlet_name && <p className="detail-meta">Primary outlet: {journalist.outlet_name}</p>}
-        {journalist.primary_beat && <p className="detail-meta">Beat: {journalist.primary_beat}</p>}
-        {journalist.email && <p className="detail-meta">Email: <a href={`mailto:${journalist.email}`}>{journalist.email}</a></p>}
-        {journalist.status && <p className={`detail-meta status-badge ${journalist.status.includes('Not') ? 'neg' : 'pos'}`}>{journalist.status}</p>}
-      </div>
-      <div className="detail-stats">
-        <div className="detail-stat"><div className="detail-stat-value">{journalist.total_outlets ?? journalist.outlets?.length ?? 0}</div><div className="detail-stat-label">Outlets</div></div>
-        {journalist.channel && <div className="detail-stat"><div className="detail-stat-value">{journalist.channel}</div><div className="detail-stat-label">Channel</div></div>}
-      </div>
-      <div className="detail-section">
-        <p className="detail-section-title">Contact & Social</p>
-        <div className="social-links">
-          {journalist.twitter && <a href={journalist.twitter} target="_blank" rel="noopener noreferrer" className="social-link twitter">Twitter / X</a>}
-          {journalist.linkedin && <a href={journalist.linkedin} target="_blank" rel="noopener noreferrer" className="social-link linkedin">LinkedIn</a>}
-          {!journalist.twitter && !journalist.linkedin && <p className="no-data">No social links on file</p>}
-        </div>
-      </div>
-      {articles.length > 0 && (
-        <div className="detail-section">
-          <p className="detail-section-title">Articles in Dataset ({articles.length})</p>
-          <div className="article-list">
-            {articles.slice(0, 10).map((url, i) => (
-              <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="article-link">{url.replace(/^https?:\/\//, '').substring(0, 60)}…</a>
-            ))}
-            {articles.length > 10 && <p className="more-note">+{articles.length - 10} more</p>}
-          </div>
-        </div>
-      )}
-      {journalist.bio_notes && (
-        <div className="detail-section"><p className="detail-section-title">Notes</p><p className="notes-text">{journalist.bio_notes}</p></div>
-      )}
-      {journalist.outlets && journalist.outlets.length > 0 && (
-        <><p className="detail-section-title">Linked Media Outlets</p><div className="detail-links">
-          {journalist.outlets.map((o) => (
-            <div key={o.id} className="detail-link-item" onClick={() => onSelectOutlet(o.id)}>
-              <span className="item-name">{o.name}</span>
-              {o.role && <span className="item-meta">{o.role}</span>}
-              {o.twitter && <span className="item-meta">Twitter</span>}
-            </div>
-          ))}
-        </div></>
-      )}
-    </div>
-  );
-}
-
-// ─── Outlet Detail ───────────────────────────────────────────────────────────
-
-function OutletDetail({ id, onBack, onSelectJournalist }: { id: number; onBack: () => void; onSelectJournalist: (id: number) => void }) {
-  const [outlet, setOutlet] = useState<Outlet | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => { api.getOutlet(id).then(setOutlet).catch(() => setErr('Failed to load outlet')).finally(() => setLoading(false)); }, [id]);
-
-  if (loading) return <p className="loading">Loading outlet…</p>;
-  if (err || !outlet) return <p className="error-msg">{err || 'Not found'}</p>;
-
-  const eciArticles: string[] = outlet.eci_articles ? JSON.parse(outlet.eci_articles) : [];
-  const people: string[] = outlet.people_names ? outlet.people_names.split(',').map(p => p.trim()).filter(Boolean) : [];
-
-  return (
-    <div className="detail-view">
-      <span className="back-btn" onClick={onBack}>&larr; Back</span>
-      <div className="detail-header">
-        <h2>{outlet.name}</h2>
-        {outlet.name_gr && <p className="detail-meta greek">{outlet.name_gr}</p>}
-        <div className="meta-row">
-          {outlet.type_of_media && <span className="meta-chip">{outlet.type_of_media}</span>}
-          {outlet.geographical_level && <span className="meta-chip geo">{outlet.geographical_level}</span>}
-          {outlet.website && <a href={outlet.website} target="_blank" rel="noopener noreferrer" className="meta-chip web">Website</a>}
-        </div>
-      </div>
-      {(outlet.combined_score != null || outlet.progressive_score != null || outlet.eu_coverage_score != null) && (
-        <div className="detail-stats">
-          {outlet.combined_score != null && <div className="detail-stat"><div className={`detail-stat-value ${outlet.combined_score >= 5 ? 'high' : outlet.combined_score >= 3 ? 'med' : 'low'}`}>{outlet.combined_score}</div><div className="detail-stat-label">EU Score</div></div>}
-          {outlet.progressive_score != null && <div className="detail-stat"><div className="detail-stat-value">{outlet.progressive_score}</div><div className="detail-stat-label">Prog. Score</div></div>}
-          {outlet.eu_coverage_score != null && <div className="detail-stat"><div className="detail-stat-value">{outlet.eu_coverage_score}</div><div className="detail-stat-label">EU Coverage</div></div>}
-          {outlet.total_journalists != null && <div className="detail-stat"><div className="detail-stat-value">{outlet.total_journalists}</div><div className="detail-stat-label">Journalists</div></div>}
-        </div>
-      )}
-      {(outlet.facebook || outlet.twitter || outlet.instagram || outlet.linkedin || outlet.youtube) && (
-        <div className="detail-section"><p className="detail-section-title">Social Media</p><div className="social-chips">
-          {outlet.facebook && <a href={outlet.facebook} target="_blank" rel="noopener noreferrer" className="social-chip fb">Facebook</a>}
-          {outlet.twitter && <a href={outlet.twitter} target="_blank" rel="noopener noreferrer" className="social-chip tw">Twitter</a>}
-          {outlet.instagram && <a href={outlet.instagram} target="_blank" rel="noopener noreferrer" className="social-chip ig">Instagram</a>}
-          {outlet.linkedin && <a href={outlet.linkedin} target="_blank" rel="noopener noreferrer" className="social-chip li">LinkedIn</a>}
-          {outlet.youtube && <a href={outlet.youtube} target="_blank" rel="noopener noreferrer" className="social-chip yt">YouTube</a>}
-        </div></div>
-      )}
-      {people.length > 0 && (
-        <div className="detail-section"><p className="detail-section-title">Journalists ({people.length})</p><div className="people-list">{people.map((p, i) => <span key={i} className="person-chip">{p}</span>)}</div></div>
-      )}
-      {eciArticles.length > 0 && (
-        <div className="detail-section"><p className="detail-section-title">ECI Articles ({eciArticles.length})</p><div className="article-list">
-          {eciArticles.slice(0, 10).map((item, i) => <p key={i} className="eci-item">{item}</p>)}
-          {eciArticles.length > 10 && <p className="more-note">+{eciArticles.length - 10} more</p>}
-        </div></div>
-      )}
-      {outlet.description_gr && <div className="detail-section"><p className="detail-section-title">Description</p><p className="notes-text">{outlet.description_gr}</p></div>}
-      {outlet.notes && <div className="detail-section"><p className="detail-section-title">Notes</p><p className="notes-text">{outlet.notes}</p></div>}
-      {outlet.media_companies && <div className="detail-section"><p className="detail-section-title">Media Companies</p><p className="notes-text">{outlet.media_companies}</p></div>}
-      {outlet.journalists && outlet.journalists.length > 0 && (
-        <><p className="detail-section-title">Linked Journalists</p><div className="detail-links">
-          {outlet.journalists.map((j) => (
-            <div key={j.id} className="detail-link-item" onClick={() => onSelectJournalist(j.id)}>
-              <span className="item-name">{j.name}</span>
-              {j.role && <span className="item-meta">{j.role}</span>}
-              {j.twitter && <span className="item-meta">Twitter</span>}
-              {j.linkedin && <span className="item-meta">LinkedIn</span>}
-            </div>
-          ))}
-        </div></>
-      )}
+      {/* Quick status */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">Data Quality</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-2">
+          <Badge variant="secondary">{stats.outlets_with_eci} outlets with EU coverage</Badge>
+          <Badge variant="secondary">{stats.progressive_outlets} progressive outlets</Badge>
+          <Badge variant="secondary">{stats.total_ngo_matches} NGO ↔ OKOIP links</Badge>
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// NGO Views
+// NGOs
 // ═══════════════════════════════════════════════════════════════════════════════
+
+import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { ChevronLeft, ChevronRight, Globe, Mail, MapPin } from 'lucide-react';
 
 function NGOListView({ onSelect }: { onSelect: (id: number) => void }) {
   const [ngos, setNGOs] = useState<NGO[]>([]);
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const pageSize = 25;
 
   const load = useCallback((q: string, p: number) => {
     setLoading(true);
     api.getNGOs(q || undefined, p)
       .then((r) => { setNGOs(r.ngos); setTotal(r.total); })
-      .catch(() => setErr('Failed to load NGOs'))
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => { load(query, page); }, [query, page, load]);
 
-  const totalPages = Math.ceil(total / 25);
+  const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="section active">
-      <p className="section-title">Curated NGOs ({total})</p>
-      <div className="search-container">
-        <input className="search-input" placeholder="Search by name…" value={query}
-          onChange={(e) => { setQuery(e.target.value); setPage(1); }} />
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Input
+          placeholder="Search NGOs by name..."
+          value={query}
+          onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+          className="max-w-sm"
+        />
+        <p className="text-xs text-muted-foreground">{total} NGOs</p>
       </div>
-      {loading && <p className="loading">Loading…</p>}
-      {err && <p className="error-msg">{err}</p>}
-      {!loading && !err && (
+
+      {loading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      ) : (
         <>
-          <div className="list-container">
-            {ngos.map((n) => (
-              <div key={n.id} className="list-item" onClick={() => onSelect(n.id)}>
-                <div className="item-primary">
-                  <span className="item-name">{n.company_name}</span>
-                  <span className="item-meta">{n.email || '—'}</span>
-                </div>
-                <div className="item-tags">
-                  {n.category && <span className="tag">{n.category}</span>}
-                  {n.website && <span className="tag web">web</span>}
-                  {n.city && <span className="tag geo">{n.city}</span>}
-                </div>
-              </div>
-            ))}
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead className="hidden md:table-cell">Email</TableHead>
+                  <TableHead className="hidden lg:table-cell">City</TableHead>
+                  <TableHead className="w-20">Web</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {ngos.map((n) => (
+                  <TableRow
+                    key={n.id}
+                    className="cursor-pointer"
+                    onClick={() => onSelect(n.id)}
+                  >
+                    <TableCell className="font-medium">{n.company_name}</TableCell>
+                    <TableCell>{n.category && <Badge variant="secondary" className="text-[10px]">{n.category}</Badge>}</TableCell>
+                    <TableCell className="hidden md:table-cell text-muted-foreground text-xs">
+                      {n.email ? <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{n.email}</span> : '—'}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-muted-foreground text-xs">
+                      {n.city ? <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{n.city}</span> : '—'}
+                    </TableCell>
+                    <TableCell>
+                      {n.website ? <Globe className="h-3.5 w-3.5 text-muted-foreground" /> : '—'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
+
           {totalPages > 1 && (
-            <div className="pagination">
-              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)}>&larr; Prev</button>
-              <span className="page-info">{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>Next &rarr;</button>
+            <div className="flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-xs text-muted-foreground px-2">{page} / {totalPages}</span>
+              <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           )}
         </>
@@ -465,106 +235,139 @@ function NGOListView({ onSelect }: { onSelect: (id: number) => void }) {
   );
 }
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 function NGODetailView({ id, onBack, onSelectOKOIP }: { id: number; onBack: () => void; onSelectOKOIP: (id: number) => void }) {
   const [ngo, setNGO] = useState<NGO | null>(null);
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
 
-  useEffect(() => { api.getNGO(id).then(setNGO).catch(() => setErr('Failed to load NGO')).finally(() => setLoading(false)); }, [id]);
+  useEffect(() => { api.getNGO(id).then(setNGO).catch(() => {}).finally(() => setLoading(false)); }, [id]);
 
-  if (loading) return <p className="loading">Loading NGO…</p>;
-  if (err || !ngo) return <p className="error-msg">{err || 'Not found'}</p>;
+  if (loading) return <div className="space-y-3">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}</div>;
+  if (!ngo) return <p className="text-sm text-muted-foreground">NGO not found.</p>;
 
   return (
-    <div className="detail-view">
-      <span className="back-btn" onClick={onBack}>&larr; Back</span>
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="sm" onClick={onBack}>&larr; Back</Button>
+      </div>
 
-      <div className="detail-header">
-        <h2>{ngo.company_name}</h2>
-        <div className="meta-row">
-          {ngo.category && <span className="meta-chip">{ngo.category}</span>}
-          {ngo.city && <span className="meta-chip geo">{ngo.city}</span>}
-          {ngo.website && <a href={ngo.website} target="_blank" rel="noopener noreferrer" className="meta-chip web">Website</a>}
+      <div>
+        <h2 className="text-xl font-semibold">{ngo.company_name}</h2>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {ngo.category && <Badge>{ngo.category}</Badge>}
+          {ngo.city && <Badge variant="secondary"><MapPin className="h-3 w-3 mr-1" />{ngo.city}</Badge>}
+          {ngo.website && <Badge variant="outline" className="text-xs"><Globe className="h-3 w-3 mr-1" />Website</Badge>}
         </div>
       </div>
 
-      {ngo.email && <div className="detail-section"><p className="detail-section-title">Contact</p><p className="notes-text">{ngo.email}{ngo.phone ? ` | ${ngo.phone}` : ''}{ngo.address ? `<br/>${ngo.address}` : ''}</p></div>}
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="okoip">OKOIP Links ({ngo.okoip_matches?.length || 0})</TabsTrigger>
+          <TabsTrigger value="platforms">Platforms</TabsTrigger>
+        </TabsList>
 
-      {/* Social Profiles */}
-      {ngo.social && ngo.social.length > 0 && (
-        <div className="detail-section">
-          <p className="detail-section-title">Social Profiles</p>
-          <div className="social-chips">
-            {ngo.social.map((s, i) => (
-              s.profile_url ? <a key={i} href={s.profile_url} target="_blank" rel="noopener noreferrer" className={`social-chip ${s.platform === 'facebook' ? 'fb' : s.platform === 'twitter' ? 'tw' : s.platform === 'instagram' ? 'ig' : s.platform === 'linkedin' ? 'li' : s.platform === 'youtube' ? 'yt' : ''}`}>{s.platform}</a> : null
-            ))}
-          </div>
-        </div>
-      )}
+        <TabsContent value="overview" className="space-y-4 pt-4">
+          <Card>
+            <CardHeader><CardTitle className="text-sm">Contact</CardTitle></CardHeader>
+            <CardContent className="text-sm space-y-1 text-muted-foreground">
+              {ngo.email && <p>✉ {ngo.email}</p>}
+              {ngo.phone && <p>📞 {ngo.phone}</p>}
+              {ngo.address && <p>📍 {ngo.address}</p>}
+              {ngo.hubspot_id && <p>🏢 HubSpot ID: {ngo.hubspot_id}</p>}
+            </CardContent>
+          </Card>
 
-      {/* Platform Links */}
-      {ngo.platforms && Object.keys(ngo.platforms).length > 0 && (
-        <div className="detail-section">
-          <p className="detail-section-title">Platform Profiles</p>
-          {Object.entries(ngo.platforms).map(([platform, links]) => (
-            <div key={platform} style={{ marginBottom: '0.4rem' }}>
-              <p className="detail-meta" style={{ fontWeight: 600 }}>{platform}</p>
-              {(links as any[]).map((l, i) => (
-                l.profile_url ? <a key={i} href={l.profile_url} target="_blank" rel="noopener noreferrer" className="article-link">{l.profile_url}</a> : null
+          {ngo.social && ngo.social.length > 0 && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Social Profiles</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {ngo.social.map((s, i) => (
+                  s.profile_url ? (
+                    <a key={i} href={s.profile_url} target="_blank" rel="noopener noreferrer">
+                      <Badge variant="secondary" className="text-xs capitalize">{s.platform}</Badge>
+                    </a>
+                  ) : null
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="okoip" className="pt-4">
+          {ngo.okoip_matches && ngo.okoip_matches.length > 0 ? (
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Match</TableHead>
+                    <TableHead>Email</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ngo.okoip_matches.map((m, i) => (
+                    <TableRow key={i} className="cursor-pointer" onClick={() => onSelectOKOIP(m.okoip_id as unknown as number)}>
+                      <TableCell className="font-medium">{m.title || 'Unnamed'}</TableCell>
+                      <TableCell>
+                        <Badge className={m.match_score >= 0.7 ? 'bg-green-100 text-green-800' : m.match_score >= 0.4 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}>
+                          {m.match_method}: {m.match_score}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-xs">{m.okoip_email || '—'}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No OKOIP matches.</p>
+          )}
+        </TabsContent>
+
+        <TabsContent value="platforms" className="pt-4">
+          {ngo.platforms && Object.keys(ngo.platforms).length > 0 ? (
+            <div className="space-y-3">
+              {Object.entries(ngo.platforms).map(([platform, links]) => (
+                <Card key={platform}>
+                  <CardHeader><CardTitle className="text-sm capitalize">{platform}</CardTitle></CardHeader>
+                  <CardContent className="space-y-1">
+                    {(links as any[]).map((l, i) => (
+                      l.profile_url ? (
+                        <a key={i} href={l.profile_url} target="_blank" rel="noopener noreferrer" className="block text-xs text-blue-600 hover:underline truncate">
+                          {l.profile_url}
+                        </a>
+                      ) : null
+                    ))}
+                  </CardContent>
+                </Card>
               ))}
             </div>
-          ))}
-        </div>
-      )}
-
-      {/* HubSpot */}
-      {ngo.hubspot_id && <div className="detail-section"><p className="detail-section-title">HubSpot</p><p className="notes-text">Company ID: {ngo.hubspot_id}</p></div>}
-
-      {/* OKOIP Matches */}
-      {ngo.okoip_matches && ngo.okoip_matches.length > 0 && (
-        <div className="detail-section">
-          <p className="detail-section-title">OKOIP Registry Matches ({ngo.okoip_matches.length})</p>
-          <div className="detail-links">
-            {ngo.okoip_matches.map((m, i) => (
-              <div key={i} className="detail-link-item" onClick={() => onSelectOKOIP(m.okoip_id as unknown as number)}>
-                <div>
-                  <span className="item-name">{m.title || 'Unnamed'}</span>
-                  <div className="item-tags" style={{ marginTop: '0.25rem' }}>
-                    <span className={`tag ${m.match_score >= 0.7 ? 'high' : m.match_score >= 0.4 ? 'med' : 'low'}`}>{m.match_method}: {m.match_score}</span>
-                    {m.okoip_category && <span className="tag">{m.okoip_category}</span>}
-                    {m.region && <span className="tag geo">{m.region}</span>}
-                  </div>
-                </div>
-                <span className="item-meta">{m.okoip_email || '—'}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {(!ngo.okoip_matches || ngo.okoip_matches.length === 0) && (
-        <div className="detail-section">
-          <p className="detail-section-title">OKOIP Registry</p>
-          <p className="no-data">No OKOIP matches found. This NGO was not automatically linked to the public registry.</p>
-        </div>
-      )}
+          ) : (
+            <p className="text-sm text-muted-foreground">No platform links.</p>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// OKOIP Registry Views
+// OKOIP
 // ═══════════════════════════════════════════════════════════════════════════════
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 function OKOIPListView({ onSelect }: { onSelect: (id: number | string) => void }) {
   const [records, setRecords] = useState<OKOIPRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
   const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('all');
   const [categories, setCategories] = useState<{ category: string; count: number }[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const pageSize = 25;
 
   useEffect(() => {
     api.getOKOIPCategories().then(r => setCategories(r.categories)).catch(() => {});
@@ -572,53 +375,79 @@ function OKOIPListView({ onSelect }: { onSelect: (id: number | string) => void }
 
   const load = useCallback(() => {
     setLoading(true);
-    api.getOKOIPRecords({ q: query || undefined, category: category || undefined, page })
+    api.getOKOIPRecords({ q: query || undefined, category: category !== 'all' ? category : undefined, page })
       .then((r) => { setRecords(r.okoip); setTotal(r.total); })
-      .catch(() => setErr('Failed to load OKOIP records'))
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [query, category, page]);
 
   useEffect(() => { load(); }, [load]);
 
-  const totalPages = Math.ceil(total / 25);
+  const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="section active">
-      <p className="section-title">OKOIP Public Registry ({total} active CSOs)</p>
-      <div className="search-container" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <input className="search-input" style={{ flex: 1, minWidth: '200px' }} placeholder="Search by name or TIN…" value={query}
-          onChange={(e) => { setQuery(e.target.value); setPage(1); }} />
-        <select className="search-input" style={{ width: 'auto', minWidth: '160px' }} value={category}
-          onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
-          <option value="">All categories</option>
-          {categories.map((c) => <option key={c.category} value={c.category}>{c.category} ({c.count})</option>)}
-        </select>
-      </div>
-      {loading && <p className="loading">Loading…</p>}
-      {err && <p className="error-msg">{err}</p>}
-      {!loading && !err && (
-        <>
-          <div className="list-container">
-            {records.map((r) => (
-              <div key={r.id} className="list-item" onClick={() => onSelect(r.id)}>
-                <div className="item-primary">
-                  <span className="item-name">{(r.title || 'Unnamed').substring(0, 60)}</span>
-                  <span className="item-meta">{r.email || '—'}</span>
-                </div>
-                <div className="item-tags">
-                  {r.category && <span className="tag">{r.category}</span>}
-                  {r.region && <span className="tag geo">{(r.region || '').replace(/\(.*\)/, '').trim()}</span>}
-                  {r.tin && <span className="tag">TIN: {r.tin}</span>}
-                  {r.form_status === 1 && <span className="tag pos">Active</span>}
-                </div>
-              </div>
+    <div className="space-y-4">
+      <div className="flex items-center gap-3 flex-wrap">
+        <Input
+          placeholder="Search by name..."
+          value={query}
+          onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+          className="max-w-sm"
+        />
+        <Select value={category} onValueChange={(v) => { setCategory(v ?? 'all'); setPage(1); }}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="All categories" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All categories</SelectItem>
+            {categories.map((c) => (
+              <SelectItem key={c.category} value={c.category}>{c.category} ({c.count})</SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground">{total} records</p>
+      </div>
+
+      {loading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+        </div>
+      ) : (
+        <>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead className="hidden md:table-cell">Region</TableHead>
+                  <TableHead className="hidden lg:table-cell">TIN</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {records.map((r) => (
+                  <TableRow key={r.id} className="cursor-pointer" onClick={() => onSelect(r.id)}>
+                    <TableCell className="font-medium">{(r.title || 'Unnamed').substring(0, 60)}</TableCell>
+                    <TableCell>{r.category && <Badge variant="secondary" className="text-[10px]">{r.category}</Badge>}</TableCell>
+                    <TableCell className="hidden md:table-cell text-muted-foreground text-xs">
+                      {r.region ? (r.region || '').replace(/\(.*\)/, '').trim() : '—'}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-muted-foreground text-xs font-mono">{r.tin || '—'}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
+
           {totalPages > 1 && (
-            <div className="pagination">
-              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)}>&larr; Prev</button>
-              <span className="page-info">{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>Next &rarr;</button>
+            <div className="flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-xs text-muted-foreground px-2">{page} / {totalPages}</span>
+              <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           )}
         </>
@@ -630,103 +459,536 @@ function OKOIPListView({ onSelect }: { onSelect: (id: number | string) => void }
 function OKOIPDetailView({ id, onBack, onSelectNGO }: { id: number | string; onBack: () => void; onSelectNGO: (id: number) => void }) {
   const [record, setRecord] = useState<OKOIPRecord | null>(null);
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
 
-  useEffect(() => { api.getOKOIPRecord(id).then(setRecord).catch(() => setErr('Failed to load OKOIP record')).finally(() => setLoading(false)); }, [id]);
+  useEffect(() => { api.getOKOIPRecord(id).then(setRecord).catch(() => {}).finally(() => setLoading(false)); }, [id]);
 
-  if (loading) return <p className="loading">Loading OKOIP record…</p>;
-  if (err || !record) return <p className="error-msg">{err || 'Not found'}</p>;
+  if (loading) return <div className="space-y-3">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}</div>;
+  if (!record) return <p className="text-sm text-muted-foreground">OKOIP record not found.</p>;
 
   return (
-    <div className="detail-view">
-      <span className="back-btn" onClick={onBack}>&larr; Back</span>
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="sm" onClick={onBack}>&larr; Back</Button>
+      </div>
 
-      <div className="detail-header">
-        <h2>{record.title || 'Unnamed Organization'}</h2>
-        <div className="meta-row">
-          {record.category && <span className="meta-chip">{record.category}</span>}
-          {record.form_status === 1 && <span className="meta-chip" style={{ background: '#dcfce7', color: '#16a34a' }}>Active</span>}
-          {record.tin && <span className="meta-chip">TIN: {record.tin}</span>}
+      <div>
+        <h2 className="text-xl font-semibold">{record.title || 'Unnamed Organization'}</h2>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {record.category && <Badge>{record.category}</Badge>}
+          {record.form_status === 1 && <Badge variant="secondary" className="bg-green-100 text-green-800">Active</Badge>}
+          {record.tin && <Badge variant="outline" className="font-mono text-xs">TIN: {record.tin}</Badge>}
         </div>
       </div>
 
-      {/* Contact */}
-      <div className="detail-stats">
-        {record.email && <div className="detail-stat"><div className="detail-stat-value" style={{ fontSize: '0.9rem', fontWeight: 600 }}>✉</div><div className="detail-stat-label">{record.email}</div></div>}
-        {record.phone && <div className="detail-stat"><div className="detail-stat-value" style={{ fontSize: '0.9rem', fontWeight: 600 }}>📞</div><div className="detail-stat-label">{record.phone}</div></div>}
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="ngos">Linked NGOs ({record.linked_ngos?.length || 0})</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4 pt-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Contact</CardTitle></CardHeader>
+              <CardContent className="text-sm space-y-1 text-muted-foreground">
+                {record.email && <p>✉ {record.email}</p>}
+                {record.phone && <p>📞 {record.phone}</p>}
+                <p>📍 {[record.street, record.street_number].filter(Boolean).join(' ') || '—'}{record.postcode ? `, ${record.postcode}` : ''}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Geography</CardTitle></CardHeader>
+              <CardContent className="text-sm space-y-1 text-muted-foreground">
+                <p>🏛 {(record.region || '').replace(/\(.*\)/, '').trim() || '—'}</p>
+                <p>📍 {record.prefecture || ''}{record.municipality ? ` / ${record.municipality}` : ''}</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {(record.legal_name || record.legal_surname) && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Legal Representative</CardTitle></CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                <p>{[record.legal_name, record.legal_surname].filter(Boolean).join(' ')}{record.legal_tin ? ` (TIN: ${record.legal_tin})` : ''}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {record.purpose && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Purpose</CardTitle></CardHeader>
+              <CardContent className="text-sm text-muted-foreground whitespace-pre-line">{record.purpose}</CardContent>
+            </Card>
+          )}
+
+          {record.grant_value != null && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Grant</CardTitle></CardHeader>
+              <CardContent className="text-sm text-muted-foreground">€{Number(record.grant_value).toLocaleString()}</CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="ngos" className="pt-4">
+          {record.linked_ngos && record.linked_ngos.length > 0 ? (
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>NGO</TableHead>
+                    <TableHead>Match</TableHead>
+                    <TableHead>Email</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {record.linked_ngos.map((l, i) => (
+                    <TableRow key={i} className="cursor-pointer" onClick={() => onSelectNGO(l.ngo_id)}>
+                      <TableCell className="font-medium">{l.company_name}</TableCell>
+                      <TableCell>
+                        <Badge className={l.match_score >= 0.7 ? 'bg-green-100 text-green-800' : l.match_score >= 0.4 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}>
+                          {l.match_method}: {l.match_score}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-xs">{l.email || '—'}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Not linked to any curated NGOs.</p>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// JOURNALISTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import type { Journalist, Outlet, Stats } from './api';
+
+function JournalistsView({ onSelect }: { onSelect: (id: number) => void }) {
+  const [journalists, setJournalists] = useState<Journalist[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const pageSize = 25;
+
+  const load = useCallback((q: string, p: number) => {
+    setLoading(true);
+    api.getJournalists(q || undefined, p)
+      .then((r) => { setJournalists(r.journalists as Journalist[]); setTotal(r.per_page === pageSize && r.journalists.length < pageSize ? (p - 1) * pageSize + r.journalists.length : (p * pageSize)); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(query, page); }, [query, page, load]);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Input placeholder="Search journalists..." value={query}
+          onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+          className="max-w-sm" />
+        <p className="text-xs text-muted-foreground">{journalists.length > 0 ? `Showing ${journalists.length}` : ''}</p>
       </div>
 
-      <div className="detail-section">
-        <p className="detail-section-title">Address</p>
-        <p className="notes-text">
-          {[record.street, record.street_number].filter(Boolean).join(' ') || '—'}
-          {record.postcode ? `, ${record.postcode}` : ''}
-        </p>
-      </div>
-
-      <div className="detail-section">
-        <p className="detail-section-title">Geography</p>
-        <p className="notes-text">
-          {record.region ? (record.region || '').replace(/\(.*\)/, '').trim() + ', ' : ''}
-          {record.prefecture || ''}
-          {record.municipality ? ` / ${record.municipality}` : ''}
-        </p>
-      </div>
-
-      {/* Legal Representative */}
-      {(record.legal_name || record.legal_surname) && (
-        <div className="detail-section">
-          <p className="detail-section-title">Legal Representative</p>
-          <p className="notes-text">
-            {[record.legal_name, record.legal_surname].filter(Boolean).join(' ')}
-            {record.legal_tin ? ` (TIN: ${record.legal_tin})` : ''}
-          </p>
+      {loading ? (
+        <div className="space-y-2">{Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
+      ) : (
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Outlet</TableHead>
+                <TableHead className="hidden md:table-cell">Beat</TableHead>
+                <TableHead className="hidden lg:table-cell">Email</TableHead>
+                <TableHead>Social</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {journalists.length === 0 ? (
+                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No journalists found.</TableCell></TableRow>
+              ) : journalists.map((j) => (
+                <TableRow key={j.id} className="cursor-pointer" onClick={() => onSelect(j.id)}>
+                  <TableCell className="font-medium">{j.name}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{j.outlet_name || '—'}</TableCell>
+                  <TableCell className="hidden md:table-cell text-xs text-muted-foreground">{j.primary_beat || '—'}</TableCell>
+                  <TableCell className="hidden lg:table-cell text-xs text-muted-foreground">{j.email || '—'}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      {j.twitter && <Badge variant="secondary" className="text-[10px]">𝕏</Badge>}
+                      {j.linkedin && <Badge variant="secondary" className="text-[10px]">in</Badge>}
+                      {j.status && <Badge variant="outline" className="text-[10px]">{j.status.includes('Not') ? '✗' : '✓'}</Badge>}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
+    </div>
+  );
+}
 
-      {/* Purpose */}
-      {record.purpose && (
-        <div className="detail-section">
-          <p className="detail-section-title">Purpose / Activities</p>
-          <p className="notes-text">{record.purpose}</p>
+function JournalistDetailView({ id, onBack, onSelectOutlet }: { id: number; onBack: () => void; onSelectOutlet: (id: number) => void }) {
+  const [journalist, setJournalist] = useState<Journalist | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { api.getJournalist(id).then(setJournalist).catch(() => {}).finally(() => setLoading(false)); }, [id]);
+
+  if (loading) return <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}</div>;
+  if (!journalist) return <p className="text-sm text-muted-foreground">Journalist not found.</p>;
+
+  const articles: string[] = journalist.articles ? JSON.parse(journalist.articles) : [];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="sm" onClick={onBack}>&larr; Back</Button>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold">{journalist.name}</h2>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {journalist.outlet_name && <Badge variant="secondary">{journalist.outlet_name}</Badge>}
+          {journalist.primary_beat && <Badge variant="outline">{journalist.primary_beat}</Badge>}
+          {journalist.status && (
+            <Badge className={journalist.status.includes('Not') ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}>
+              {journalist.status}
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="articles">Articles ({articles.length})</TabsTrigger>
+          {journalist.outlets && journalist.outlets.length > 0 && <TabsTrigger value="outlets">Outlets ({journalist.outlets.length})</TabsTrigger>}
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4 pt-4">
+          <Card>
+            <CardHeader><CardTitle className="text-sm">Contact</CardTitle></CardHeader>
+            <CardContent className="text-sm space-y-1 text-muted-foreground">
+              {journalist.email && <p>✉ {journalist.email}</p>}
+              {journalist.channel && <p>📺 {journalist.channel}</p>}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle className="text-sm">Social</CardTitle></CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              {journalist.twitter ? (
+                <a href={journalist.twitter} target="_blank" rel="noopener noreferrer"><Badge className="bg-sky-100 text-sky-800 hover:bg-sky-200">𝕏 Twitter</Badge></a>
+              ) : null}
+              {journalist.linkedin ? (
+                <a href={journalist.linkedin} target="_blank" rel="noopener noreferrer"><Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">in LinkedIn</Badge></a>
+              ) : null}
+              {!journalist.twitter && !journalist.linkedin && <p className="text-xs text-muted-foreground">No social links</p>}
+            </CardContent>
+          </Card>
+
+          {journalist.bio_notes && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Notes</CardTitle></CardHeader>
+              <CardContent className="text-sm text-muted-foreground">{journalist.bio_notes}</CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="articles" className="pt-4">
+          {articles.length > 0 ? (
+            <div className="space-y-1">
+              {articles.slice(0, 20).map((url, i) => (
+                <a key={i} href={url} target="_blank" rel="noopener noreferrer"
+                   className="block text-xs text-blue-600 hover:underline truncate py-1 border-b border-border/50 last:border-0">
+                  {url.replace(/^https?:\/\//, '').substring(0, 80)}…
+                </a>
+              ))}
+              {articles.length > 20 && <p className="text-xs text-muted-foreground mt-2">+{articles.length - 20} more articles</p>}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No articles recorded.</p>
+          )}
+        </TabsContent>
+
+        <TabsContent value="outlets" className="pt-4">
+          {journalist.outlets && journalist.outlets.length > 0 ? (
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Outlet</TableHead>
+                    <TableHead>Role</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {journalist.outlets.map((o) => (
+                    <TableRow key={o.id} className="cursor-pointer" onClick={() => onSelectOutlet(o.id)}>
+                      <TableCell className="font-medium">{o.name}</TableCell>
+                      <TableCell className="text-xs text-muted-foreground">{o.role || '—'}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Not linked to any outlets.</p>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MEDIA OUTLETS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function OutletsView({ onSelect }: { onSelect: (id: number) => void }) {
+  const [outlets, setOutlets] = useState<Outlet[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+
+  const load = useCallback((q: string, p: number) => {
+    setLoading(true);
+    api.getOutlets(q || undefined, p)
+      .then((r) => setOutlets(r.outlets))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(query, page); }, [query, page, load]);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Input placeholder="Search outlets..." value={query}
+          onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+          className="max-w-sm" />
+        <p className="text-xs text-muted-foreground">{outlets.length > 0 ? `Showing ${outlets.length}` : ''}</p>
+      </div>
+
+      {loading ? (
+        <div className="space-y-2">{Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
+      ) : (
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead className="hidden md:table-cell">Geo</TableHead>
+                <TableHead className="hidden lg:table-cell">Topics</TableHead>
+                <TableHead>Scores</TableHead>
+                <TableHead>Social</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {outlets.length === 0 ? (
+                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No outlets found.</TableCell></TableRow>
+              ) : outlets.map((o) => (
+                <TableRow key={o.id} className="cursor-pointer" onClick={() => onSelect(o.id)}>
+                  <TableCell className="font-medium">{o.name}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{o.type_of_media || '—'}</TableCell>
+                  <TableCell className="hidden md:table-cell text-xs text-muted-foreground">{o.geographical_level || '—'}</TableCell>
+                  <TableCell className="hidden lg:table-cell text-xs text-muted-foreground max-w-[150px] truncate">{o.topics || '—'}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      {o.combined_score != null && (
+                        <Badge className={o.combined_score >= 5 ? 'bg-green-100 text-green-800' : o.combined_score >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}>
+                          {o.combined_score}
+                        </Badge>
+                      )}
+                      {o.progressive_score != null && o.progressive_score >= 3 && <Badge variant="secondary" className="text-[10px]">P{o.progressive_score}</Badge>}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      {o.facebook && <Badge variant="secondary" className="text-[10px]">fb</Badge>}
+                      {o.twitter && <Badge variant="secondary" className="text-[10px]">𝕏</Badge>}
+                      {o.instagram && <Badge variant="secondary" className="text-[10px]">ig</Badge>}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
+    </div>
+  );
+}
 
-      {/* Grant */}
-      {record.grant_value != null && (
-        <div className="detail-section">
-          <p className="detail-section-title">Grant</p>
-          <p className="notes-text">&euro;{Number(record.grant_value).toLocaleString()}</p>
+function OutletDetailView({ id, onBack, onSelectJournalist }: { id: number; onBack: () => void; onSelectJournalist: (id: number) => void }) {
+  const [outlet, setOutlet] = useState<Outlet | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { api.getOutlet(id).then(setOutlet).catch(() => {}).finally(() => setLoading(false)); }, [id]);
+
+  if (loading) return <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}</div>;
+  if (!outlet) return <p className="text-sm text-muted-foreground">Outlet not found.</p>;
+
+  const eciArticles: string[] = outlet.eci_articles ? JSON.parse(outlet.eci_articles) : [];
+  const people: string[] = outlet.people_names ? outlet.people_names.split(',').map(p => p.trim()).filter(Boolean) : [];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="sm" onClick={onBack}>&larr; Back</Button>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold">{outlet.name}</h2>
+        {outlet.name_gr && <p className="text-sm text-muted-foreground italic">{outlet.name_gr}</p>}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {outlet.type_of_media && <Badge variant="secondary">{outlet.type_of_media}</Badge>}
+          {outlet.geographical_level && <Badge variant="outline">{outlet.geographical_level}</Badge>}
+          {outlet.website && (
+            <a href={outlet.website} target="_blank" rel="noopener noreferrer">
+              <Badge variant="secondary" className="hover:bg-blue-100">🌐 Website</Badge>
+            </a>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Linked NGOs */}
-      {record.linked_ngos && record.linked_ngos.length > 0 && (
-        <div className="detail-section">
-          <p className="detail-section-title">Linked Constellation NGOs ({record.linked_ngos.length})</p>
-          <div className="detail-links">
-            {record.linked_ngos.map((l, i) => (
-              <div key={i} className="detail-link-item" onClick={() => onSelectNGO(l.ngo_id)}>
-                <div>
-                  <span className="item-name">{l.company_name}</span>
-                  <div className="item-tags" style={{ marginTop: '0.25rem' }}>
-                    <span className={`tag ${l.match_score >= 0.7 ? 'high' : l.match_score >= 0.4 ? 'med' : 'low'}`}>{l.match_method}: {l.match_score}</span>
-                    {l.ngo_category && <span className="tag">{l.ngo_category}</span>}
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          {(outlet.combined_score != null || outlet.progressive_score != null) && <TabsTrigger value="scores">Scores</TabsTrigger>}
+          {eciArticles.length > 0 && <TabsTrigger value="eci">ECI ({eciArticles.length})</TabsTrigger>}
+          {outlet.journalists && outlet.journalists.length > 0 && <TabsTrigger value="journalists">Journalists ({outlet.journalists.length})</TabsTrigger>}
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4 pt-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Details</CardTitle></CardHeader>
+              <CardContent className="text-sm space-y-1 text-muted-foreground">
+                <p>📍 {outlet.geographical_level || '—'}</p>
+                <p>🏷 {outlet.type_of_media || '—'}</p>
+                {outlet.topics && <p>📋 {outlet.topics}</p>}
+                {outlet.media_companies && <p>🏢 {outlet.media_companies}</p>}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Social Media</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {outlet.facebook && <a href={outlet.facebook} target="_blank" rel="noopener noreferrer"><Badge className="bg-blue-100 text-blue-800">Facebook</Badge></a>}
+                {outlet.twitter && <a href={outlet.twitter} target="_blank" rel="noopener noreferrer"><Badge className="bg-sky-100 text-sky-800">Twitter</Badge></a>}
+                {outlet.instagram && <a href={outlet.instagram} target="_blank" rel="noopener noreferrer"><Badge className="bg-pink-100 text-pink-800">Instagram</Badge></a>}
+                {outlet.linkedin && <a href={outlet.linkedin} target="_blank" rel="noopener noreferrer"><Badge className="bg-blue-100 text-blue-800">LinkedIn</Badge></a>}
+                {outlet.youtube && <a href={outlet.youtube} target="_blank" rel="noopener noreferrer"><Badge className="bg-red-100 text-red-800">YouTube</Badge></a>}
+                {!outlet.facebook && !outlet.twitter && !outlet.instagram && !outlet.linkedin && !outlet.youtube &&
+                  <p className="text-xs text-muted-foreground">No social links recorded</p>}
+              </CardContent>
+            </Card>
+          </div>
+
+          {people.length > 0 && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">People on File ({people.length})</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-1">
+                {people.map((p, i) => <Badge key={i} variant="secondary" className="text-[10px]">{p}</Badge>)}
+              </CardContent>
+            </Card>
+          )}
+
+          {outlet.description_gr && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Description</CardTitle></CardHeader>
+              <CardContent className="text-sm text-muted-foreground">{outlet.description_gr}</CardContent>
+            </Card>
+          )}
+          {outlet.notes && (
+            <Card>
+              <CardHeader><CardTitle className="text-sm">Notes</CardTitle></CardHeader>
+              <CardContent className="text-sm text-muted-foreground">{outlet.notes}</CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="scores" className="pt-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            {outlet.combined_score != null && (
+              <Card>
+                <CardHeader><CardTitle className="text-sm">Combined EU Score</CardTitle></CardHeader>
+                <CardContent>
+                  <div className={`text-3xl font-bold ${outlet.combined_score >= 5 ? 'text-green-600' : outlet.combined_score >= 3 ? 'text-yellow-600' : 'text-red-600'}`}>
+                    {outlet.combined_score}
                   </div>
-                </div>
-                <span className="item-meta">{l.email || '—'}</span>
-              </div>
+                </CardContent>
+              </Card>
+            )}
+            {outlet.progressive_score != null && (
+              <Card>
+                <CardHeader><CardTitle className="text-sm">Progressive Score</CardTitle></CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-purple-600">{outlet.progressive_score}</div>
+                </CardContent>
+              </Card>
+            )}
+            {outlet.eu_coverage_score != null && (
+              <Card>
+                <CardHeader><CardTitle className="text-sm">EU Coverage Score</CardTitle></CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-blue-600">{outlet.eu_coverage_score}</div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="eci" className="pt-4">
+          <div className="space-y-1">
+            {eciArticles.map((item, i) => (
+              <p key={i} className="text-xs text-muted-foreground py-1 border-b border-border/50 last:border-0">{item}</p>
             ))}
           </div>
-        </div>
-      )}
+        </TabsContent>
 
-      {(!record.linked_ngos || record.linked_ngos.length === 0) && (
-        <div className="detail-section">
-          <p className="detail-section-title">Constellation Links</p>
-          <p className="no-data">Not linked to any curated NGO. This registry entry exists separately.</p>
-        </div>
-      )}
+        <TabsContent value="journalists" className="pt-4">
+          {outlet.journalists && outlet.journalists.length > 0 ? (
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Social</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {outlet.journalists.map((j) => (
+                    <TableRow key={j.id} className="cursor-pointer" onClick={() => onSelectJournalist(j.id)}>
+                      <TableCell className="font-medium">{j.name}</TableCell>
+                      <TableCell className="text-xs text-muted-foreground">{j.role || '—'}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          {j.twitter && <Badge variant="secondary" className="text-[10px]">𝕏</Badge>}
+                          {j.linkedin && <Badge variant="secondary" className="text-[10px]">in</Badge>}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No journalists linked.</p>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

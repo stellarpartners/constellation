@@ -1,6 +1,6 @@
 // API client for Constellation Workers API
 
-const API_BASE = 'https://constellation-api.stellarpartners.workers.dev/api';
+const API_BASE = '/api';
 
 // ─── Shared Types ─────────────────────────────────────────────────────────────
 

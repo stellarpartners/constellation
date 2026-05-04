@@ -3,6 +3,10 @@ main = "src/index.ts"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
+routes = [
+  { pattern = "api.constellation.stellarpartners.gr/*", zone_id = "0536e9d272ea34c6a31a060ce21dd2a7" }
+]
+
 [vars]
 ENVIRONMENT = "development"
 
