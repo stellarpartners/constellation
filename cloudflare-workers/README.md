@@ -1,4 +1,10 @@
-# Constellation API - Cloudflare Workers
+# Constellation API — Cloudflare Workers
+
+Hono-based REST API for the Constellation database, running on Cloudflare Workers with Neon PostgreSQL (serverless driver).
+
+**Base URL:** `https://constellation-api.stellarpartners.workers.dev`
+
+---
 
 ## Setup
 
@@ -6,44 +12,79 @@
 npm install
 ```
 
-## Environment Variables (local dev)
+## Environment Variables
 
-Create a `.dev.vars` file (never commit this):
+Create `.dev.vars` (never commit):
 
 ```
-NEON_CONNECTION_STRING=postgresql://user:password@host/dbname
+NEON_CONNECTION_STRING=postgresql://user:***@host/dbname?sslmode=require
+```
+
+Set on Cloudflare:
+
+```bash
+npx wrangler secret put NEON_CONNECTION_STRING
 ```
 
 ## Run locally
 
 ```bash
 npm run dev
+# → http://localhost:8787
 ```
-
-API available at `http://localhost:8787/api/*`
 
 ## Deploy
 
 ```bash
-# Set the secret
-npx wrangler secret put NEON_CONNECTION_STRING
-# (paste your Neon connection string when prompted)
-
-# Deploy
 npm run deploy
 ```
 
-Workers API deploys to: `https://constellation-api.<your-subdomain>.workers.dev`
+---
 
 ## Routes
 
+### System
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/stats` | Database stats |
-| GET | `/api/top-outlets/:limit` | Outlets ranked by journalist count |
-| GET | `/api/journalists` | List journalists (supports `?q=search&page=1`) |
-| GET | `/api/journalists/:id` | Journalist detail with linked outlets |
-| GET | `/api/outlets` | List outlets (supports `?q=search&page=1`) |
-| GET | `/api/outlets/:id` | Outlet detail with linked journalists |
-| GET | `/api/cross-platform-journalists` | Journalists at multiple outlets |
-| GET | `/api/search?q=term` | Unified search across journalists & outlets |
+| GET | `/api/stats` | All counts (NGOs, OKOIP, journalists, outlets, relationships, matches) |
+| GET | `/api/search?q=` | Cross-entity search |
+| GET | `/api/sample-urls` | Platform table URL samples |
+
+### NGOs
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/ngos` | List/search (`?q=&page=1`) |
+| GET | `/api/ngos/:id` | Detail + social + OKOIP matches + platforms + audits |
+
+### OKOIP Registry
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/okoip` | List/search/filter (`?q=&category=&page=1`) |
+| GET | `/api/okoip/:id` | Detail + linked NGOs |
+| GET | `/api/okoip/categories` | Distinct categories |
+| GET | `/api/okoip/regions` | Distinct regions |
+
+### Journalists
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/journalists` | List/search (`?q=&page=1`) |
+| GET | `/api/journalists/:id` | Detail + linked outlets + articles |
+| GET | `/api/cross-platform-journalists` | Journalists at 2+ outlets |
+
+### Media Outlets
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/outlets` | List/search (`?q=&page=1`) |
+| GET | `/api/outlets/:id` | Detail + linked journalists + scores + ECI articles |
+| GET | `/api/top-outlets/:limit` | Ranked by journalist count |
+
+---
+
+## Note on Cloudflare Access
+
+The Workers API is behind Cloudflare Access on the `workers.dev` domain. The React UI bypasses this via a **Pages Function** proxy (`react-ui/functions/api/[[catchall]].ts`) that queries Neon directly from the Pages domain, which is not behind Access.
