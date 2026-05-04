@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { MemoryRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 
@@ -37,9 +37,9 @@ if (rootEl) {
   ReactDOM.createRoot(rootEl).render(
     <React.StrictMode>
       <ErrorBoundary>
-        <MemoryRouter>
+        <BrowserRouter>
           <App />
-        </MemoryRouter>
+        </BrowserRouter>
       </ErrorBoundary>
     </React.StrictMode>
   );
