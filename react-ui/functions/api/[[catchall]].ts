@@ -72,15 +72,33 @@ export async function onRequest(context: { request: Request; env: Env }) {
       const id = ngoMatch[1];
       const [ngo] = await sql`SELECT * FROM ngos WHERE id = ${id}`;
       if (!ngo) return json({ error: 'NGO not found' }, 404);
-      const social = await sql`SELECT platform, profile_url, handle, notes FROM ngo_social_profiles WHERE ngo_id = ${id}`;
-      const okoipMatches = await sql`
-        SELECT m.match_method, m.match_score, m.match_detail,
-               r.okoip_id, r.title, r.tin, r.email as okoip_email, r.phone as okoip_phone,
-               r.region, r.prefecture, r.municipality, r.street, r.postcode,
-               r.category as okoip_category, r.organization_type, r.form_status, r.purpose, r.grant_value
-        FROM ngo_okoip_matches m JOIN okoip_registry r ON r.id = m.okoip_id
-        WHERE m.ngo_id = ${id} ORDER BY m.match_score DESC`;
-      return json({ ...ngo, social, okoip_matches: okoipMatches });
+
+      // Fetch all related data in parallel
+      const [social, okoipMatches, youbehero, socialDynamo, acf, ngheroes, ethelon, desmos, audits] = await Promise.all([
+        sql`SELECT platform, profile_url, handle, notes FROM ngo_social_profiles WHERE ngo_id = ${id}`,
+        sql`
+          SELECT m.match_method, m.match_score, m.match_detail,
+                 r.okoip_id, r.title, r.tin, r.email as okoip_email, r.phone as okoip_phone,
+                 r.region, r.prefecture, r.municipality, r.street, r.postcode,
+                 r.category as okoip_category, r.organization_type, r.form_status, r.purpose, r.grant_value
+          FROM ngo_okoip_matches m JOIN okoip_registry r ON r.id = m.okoip_id
+          WHERE m.ngo_id = ${id} ORDER BY m.match_score DESC`,
+        sql`SELECT profile_url, source_name FROM ngo_youbehero WHERE ngo_id = ${id}`,
+        sql`SELECT profile_url, source_name FROM ngo_social_dynamo WHERE ngo_id = ${id}`,
+        sql`SELECT acf_slug, source_name FROM ngo_acf WHERE ngo_id = ${id}`,
+        sql`SELECT profile_url, source_name FROM ngo_ngheroes WHERE ngo_id = ${id}`,
+        sql`SELECT profile_url, source_name FROM ngo_ethelon WHERE ngo_id = ${id}`,
+        sql`SELECT profile_url, source_name FROM ngo_desmos WHERE ngo_id = ${id}`,
+        sql`SELECT scan_date, error_rate, status_note, audited_url, http_2xx, http_3xx, http_4xx FROM website_audits WHERE ngo_id = ${id} ORDER BY scan_date DESC`,
+      ]);
+
+      return json({
+        ...ngo,
+        social,
+        okoip_matches: okoipMatches,
+        platforms: { youbehero, social_dynamo: socialDynamo, acf, ngheroes, ethelon, desmos },
+        website_audits: audits,
+      });
     }
 
     // ── OKOIP list ─────────────────────────────────────────────────────
